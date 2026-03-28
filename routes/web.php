@@ -1,0 +1,139 @@
+<?php
+
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Route d'accueil
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    $search = $request->query('search');
+    $categoryId = $request->query('category');
+    $showAll = $request->query('all');
+
+    // Catégories avec comptage
+    $categories = \App\Models\Category::withCount('courses')->get();
+
+    $baseQuery = \App\Models\Course::with(['category', 'formateur.user'])
+        ->where('status', 'approved');
+
+    // Moteur de recherche et filtres
+    if ($search || $categoryId || $showAll) {
+        $query = clone $baseQuery;
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhereHas('category', function($q2) use ($search) {
+                      $q2->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $searchResults = $query->latest()->paginate(12)->withQueryString();
+        
+        return view('welcome', compact('categories', 'searchResults', 'search', 'categoryId', 'showAll'));
+    }
+
+    // Listes par défaut
+    $recentCourses = (clone $baseQuery)
+        ->latest()
+        ->take(10)
+        ->get();
+
+    $popularCourses = (clone $baseQuery)
+        ->withCount(['orders' => function ($query) {
+            $query->where('status', 'completed');
+        }])
+        ->orderByDesc('orders_count')
+        ->take(8)
+        ->get();
+
+    return view('welcome', compact('categories', 'recentCourses', 'popularCourses'));
+})->name('home');
+
+// Route de détail d'une formation (Nécessite connexion)
+Route::get('/formations/{course}', [\App\Http\Controllers\PublicCourseController::class, 'show'])->name('courses.show')->middleware('auth');
+
+// Routes d'authentification
+Route::group([], function () {
+    // Routes de connexion
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    
+    // Routes d'inscription
+    Route::get('/register', [RegisterController::class, 'create'])
+        ->name('register');
+    
+    Route::get('/register/apprenant', [RegisterController::class, 'createApprenant'])
+        ->name('register.apprenant');
+    Route::post('/register/apprenant', [RegisterController::class, 'storeApprenant'])
+        ->name('register.apprenant.store');
+    
+    Route::get('/register/formateur', [RegisterController::class, 'createFormateur'])
+        ->name('register.formateur');
+    Route::post('/register/formateur', [RegisterController::class, 'storeFormateur'])
+        ->name('register.formateur.store');
+});
+
+// Route de déconnexion
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout')
+    ->middleware('auth');
+
+// Routes protégées
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+        
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->hasRole('formateur')) {
+            return redirect()->route('formateur.dashboard');
+        } else {
+            return redirect()->route('apprenant.dashboard');
+        }
+    })->name('dashboard');
+    
+    // Routes pour les apprenants - Utilisation du middleware SimpleRoleCheck
+    Route::prefix('apprenant')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('apprenant.dashboard');
+        })->name('apprenant.dashboard')->middleware('role:apprenant');
+        
+        // Paiement et Visionnage
+        Route::post('/checkout', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkout'])->name('apprenant.checkout');
+        Route::get('/courses/{course}/watch', [\App\Http\Controllers\Apprenant\CourseController::class, 'watch'])->name('apprenant.courses.watch');
+    });
+    
+    // Routes pour les formateurs
+    Route::prefix('formateur')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Formateur\DashboardController::class, 'index'])->name('formateur.dashboard')->middleware('role:formateur');
+        
+        // Gestion de Profil
+        Route::post('/profile', [\App\Http\Controllers\Formateur\ProfileController::class, 'update'])->name('formateur.profile.update')->middleware('role:formateur');
+        
+        // Gestion des Formations
+        Route::get('/courses', [\App\Http\Controllers\Formateur\CourseController::class, 'index'])->name('formateur.courses.index')->middleware('role:formateur');
+        Route::get('/courses/create', [\App\Http\Controllers\Formateur\CourseController::class, 'create'])->name('formateur.courses.create')->middleware('role:formateur');
+        Route::post('/courses', [\App\Http\Controllers\Formateur\CourseController::class, 'store'])->name('formateur.courses.store')->middleware('role:formateur');
+        Route::get('/courses/{course}', [\App\Http\Controllers\Formateur\CourseController::class, 'show'])->name('formateur.courses.show')->middleware('role:formateur');
+    });
+    
+    // Routes pour les admins
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', function () {
+            return view('admin.dashboard');
+        })->name('admin.dashboard')->middleware('role:admin');
+    });
+});
