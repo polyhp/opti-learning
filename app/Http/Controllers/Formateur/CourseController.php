@@ -53,11 +53,19 @@ class CourseController extends Controller
             
             // Quiz (optional but we expect global quiz structure)
             'quiz_title' => 'nullable|string',
-            'quiz_passing_score' => 'nullable|numeric|min:1|max:100',
+            'quiz_passing_score' => 'nullable|numeric|min:1|max:20',
             'questions' => 'nullable|array',
             'questions.*.text' => 'required_with:quiz_title|string',
             'questions.*.options' => 'required_with:quiz_title|array',
             'questions.*.correct_option' => 'required_with:quiz_title|numeric',
+            
+            // Makeup Quiz (optional)
+            'makeup_quiz_title' => 'nullable|string',
+            'makeup_quiz_passing_score' => 'nullable|numeric|min:1|max:20',
+            'makeup_questions' => 'nullable|array',
+            'makeup_questions.*.text' => 'required_with:makeup_quiz_title|string',
+            'makeup_questions.*.options' => 'required_with:makeup_quiz_title|array',
+            'makeup_questions.*.correct_option' => 'required_with:makeup_quiz_title|numeric',
         ]);
 
         $formateur = Auth::user()->formateur;
@@ -106,7 +114,8 @@ class CourseController extends Controller
             $quiz = CourseQuiz::create([
                 'course_id' => $course->id,
                 'title' => $request->quiz_title,
-                'passing_score' => $request->quiz_passing_score ?? 50,
+                'passing_score' => $request->quiz_passing_score ?? 10,
+                'type' => 'standard'
             ]);
 
             foreach ($request->questions as $qIndex => $qData) {
@@ -117,11 +126,41 @@ class CourseController extends Controller
                 ]);
 
                 foreach ($qData['options'] as $optIndex => $optText) {
-                    QuizOption::create([
-                        'quiz_question_id' => $question->id,
-                        'option_text' => $optText,
-                        'is_correct' => ($optIndex == $qData['correct_option']),
-                    ]);
+                    if (!empty($optText)) {
+                        QuizOption::create([
+                            'quiz_question_id' => $question->id,
+                            'option_text' => $optText,
+                            'is_correct' => ($optIndex == $qData['correct_option']),
+                        ]);
+                    }
+                }
+            }
+        }
+
+        // 4. Add Makeup Quiz if provided
+        if ($request->filled('makeup_quiz_title') && $request->has('makeup_questions')) {
+            $makeupQuiz = CourseQuiz::create([
+                'course_id' => $course->id,
+                'title' => $request->makeup_quiz_title,
+                'passing_score' => $request->makeup_quiz_passing_score ?? 10,
+                'type' => 'makeup'
+            ]);
+
+            foreach ($request->makeup_questions as $qIndex => $qData) {
+                $question = QuizQuestion::create([
+                    'course_quiz_id' => $makeupQuiz->id,
+                    'question_text' => $qData['text'],
+                    'points' => 1,
+                ]);
+
+                foreach ($qData['options'] as $optIndex => $optText) {
+                    if (!empty($optText)) {
+                        QuizOption::create([
+                            'quiz_question_id' => $question->id,
+                            'option_text' => $optText,
+                            'is_correct' => ($optIndex == $qData['correct_option']),
+                        ]);
+                    }
                 }
             }
         }
@@ -134,7 +173,9 @@ class CourseController extends Controller
         if ($course->formateur_id != Auth::user()->formateur->id) {
             abort(403, 'Accès refusé à cette formation.');
         }
-        $course->load(['lessons', 'quizzes.questions.options']);
+        $course->load(['lessons', 'quizzes' => function($query) {
+            $query->orderBy('type', 'desc'); // standard before makeup if needed
+        }, 'quizzes.questions.options']);
         return view('formateur.courses_show', compact('course'));
     }
 }

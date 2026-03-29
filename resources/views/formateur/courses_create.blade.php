@@ -161,8 +161,8 @@
                             <input type="text" name="quiz_title" id="quiz_title" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Ex: QCM Final de Validation">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Score requis pour réussir (%)</label>
-                            <input type="number" name="quiz_passing_score" min="1" max="100" value="70" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Score requis pour réussir (/20)</label>
+                            <input type="number" name="quiz_passing_score" min="1" max="20" value="10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none text-slate-700">
                         </div>
                     </div>
                 </div>
@@ -185,6 +185,55 @@
                 </div>
             </div>
         </div>
+        
+        <!-- SECTION 4: Quiz de Rattrapage (Optionnel) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative">
+            <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold mr-4">4</div>
+                    <div>
+                        <h2 class="text-xl font-head font-bold text-navy-900">Quiz de Rattrapage <span class="text-sm font-normal text-slate-400 ml-2">(Optionnel)</span></h2>
+                        <p class="text-xs text-slate-500 mt-1">Dernière chance : questions différentes si l'apprenant échoue à l'évaluation finale.</p>
+                    </div>
+                </div>
+                
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="enableMakeupToggle" class="sr-only peer" onchange="toggleMakeupSection(this)">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+                  <span class="ml-3 text-sm font-medium text-slate-600" id="makeupStatusText">Désactivé</span>
+                </label>
+            </div>
+            
+            <div id="makeup-wrapper" class="hidden">
+                <div class="p-8 border-b border-slate-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Titre du Rattrapage</label>
+                            <input type="text" name="makeup_quiz_title" id="makeup_quiz_title" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="Ex: Rattrapage - QCM Final">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Score requis pour réussir (/20)</label>
+                            <input type="number" name="makeup_quiz_passing_score" min="1" max="20" value="10" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none text-slate-700">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-8 bg-slate-50/30" id="makeup-questions-container">
+                    <div class="text-center py-6" id="empty-makeup-questions-msg">
+                        <i class="fas fa-life-ring text-4xl text-slate-200 mb-3"></i>
+                        <p class="text-slate-500 text-sm mb-4">Aucune question ajoutée au rattrapage.</p>
+                        <button type="button" onclick="addMakeupQuestion()" class="bg-red-50 hover:bg-red-100 text-red-600 px-6 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm cursor-pointer">
+                            <i class="fas fa-plus mr-2"></i> Ajouter la 1ère Question
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="px-8 py-4 bg-red-50/30 border-t border-red-100 text-right hidden" id="add-more-makeup-questions-btn">
+                    <button type="button" onclick="addMakeupQuestion()" class="text-red-500 hover:text-red-600 font-medium text-sm transition-colors cursor-pointer">
+                        <i class="fas fa-plus flex-shrink-0 mr-1"></i> Ajouter une autre question
+                    </button>
+                </div>
+            </div>
 
         <!-- Submit Button -->
         <div class="flex justify-end pt-4 pb-12">
@@ -201,6 +250,7 @@
 <script>
     let lessonCount = 1;
     let questionCount = 0;
+    let makeupQuestionCount = 0;
 
     function addLesson() {
         const container = document.getElementById('lessons-container');
@@ -313,6 +363,83 @@
             document.getElementById('add-more-questions-btn').classList.add('hidden');
         }
         updateQuestionNumbers();
+    }
+
+    function toggleMakeupSection(checkbox) {
+        const wrapper = document.getElementById('makeup-wrapper');
+        const text = document.getElementById('makeupStatusText');
+        const titleInput = document.getElementById('makeup_quiz_title');
+        
+        if (checkbox.checked) {
+            wrapper.classList.remove('hidden');
+            text.textContent = 'Activé';
+            text.classList.add('text-red-600');
+            titleInput.setAttribute('required', 'required');
+        } else {
+            wrapper.classList.add('hidden');
+            text.textContent = 'Désactivé';
+            text.classList.remove('text-red-600');
+            titleInput.removeAttribute('required');
+        }
+    }
+
+    function addMakeupQuestion() {
+        document.getElementById('empty-makeup-questions-msg').style.display = 'none';
+        document.getElementById('add-more-makeup-questions-btn').classList.remove('hidden');
+        
+        const container = document.getElementById('makeup-questions-container');
+        const qIndex = makeupQuestionCount++;
+        
+        const questionHtml = `
+            <div class="bg-white p-6 rounded-xl border border-red-100 shadow-sm mb-6 relative group makeup-question-block">
+                <div class="absolute -left-3 -top-3 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center font-bold border-4 border-white shadow-sm makeup-question-number">Q${qIndex+1}</div>
+                <button type="button" onclick="this.closest('.makeup-question-block').remove(); checkEmptyMakeupQuestions();" class="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors" title="Supprimer la question">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="pl-4">
+                    <div class="mb-4">
+                        <label class="block text-sm font-bold text-navy-900 mb-2">L'intitulé de la question <span class="text-red-500">*</span></label>
+                        <input type="text" name="makeup_questions[${qIndex}][text]" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 outline-none" placeholder="Posez votre question...">
+                    </div>
+                    
+                    <div class="space-y-3 mt-4">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Réponses (Cochez la bonne réponse) <span class="text-red-500">*</span></label>
+                        
+                        <div class="flex items-center space-x-3 bg-slate-50 p-2 rounded-lg border border-slate-100 hover:border-red-200 transition-colors">
+                            <input type="radio" name="makeup_questions[${qIndex}][correct_option]" value="0" required class="w-5 h-5 text-red-600 border-slate-300 focus:ring-red-500 cursor-pointer">
+                            <input type="text" name="makeup_questions[${qIndex}][options][]" required class="flex-grow bg-transparent border-0 focus:ring-0 px-2 outline-none text-sm placeholder-slate-400" placeholder="Option 1">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 bg-slate-50 p-2 rounded-lg border border-slate-100 hover:border-red-200 transition-colors">
+                            <input type="radio" name="makeup_questions[${qIndex}][correct_option]" value="1" required class="w-5 h-5 text-red-600 border-slate-300 focus:ring-red-500 cursor-pointer">
+                            <input type="text" name="makeup_questions[${qIndex}][options][]" required class="flex-grow bg-transparent border-0 focus:ring-0 px-2 outline-none text-sm placeholder-slate-400" placeholder="Option 2">
+                        </div>
+                        
+                        <div class="flex items-center space-x-3 bg-slate-50 p-2 rounded-lg border border-slate-100 hover:border-red-200 transition-colors">
+                            <input type="radio" name="makeup_questions[${qIndex}][correct_option]" value="2" required class="w-5 h-5 text-red-600 border-slate-300 focus:ring-red-500 cursor-pointer">
+                            <input type="text" name="makeup_questions[${qIndex}][options][]" required class="flex-grow bg-transparent border-0 focus:ring-0 px-2 outline-none text-sm placeholder-slate-400" placeholder="Option 3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', questionHtml);
+        updateMakeupQuestionNumbers();
+    }
+    
+    function updateMakeupQuestionNumbers() {
+        document.querySelectorAll('.makeup-question-block').forEach((block, index) => {
+            block.querySelector('.makeup-question-number').textContent = `Q${index + 1}`;
+        });
+    }
+
+    function checkEmptyMakeupQuestions() {
+        if(document.querySelectorAll('.makeup-question-block').length === 0) {
+            document.getElementById('empty-makeup-questions-msg').style.display = 'block';
+            document.getElementById('add-more-makeup-questions-btn').classList.add('hidden');
+        }
+        updateMakeupQuestionNumbers();
     }
 </script>
 @endpush

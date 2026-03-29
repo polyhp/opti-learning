@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -64,6 +64,9 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 // Route de détail d'une formation (Nécessite connexion)
 Route::get('/formations/{course}', [\App\Http\Controllers\PublicCourseController::class, 'show'])->name('courses.show')->middleware('auth');
 
+// Route de vérification de certificat (Publique)
+Route::get('/verify/{code}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'verify'])->name('verify.certificate');
+
 // Routes d'authentification
 Route::group([], function () {
     // Routes de connexion
@@ -84,6 +87,8 @@ Route::group([], function () {
         ->name('register.formateur');
     Route::post('/register/formateur', [RegisterController::class, 'storeFormateur'])
         ->name('register.formateur.store');
+        
+    
 });
 
 // Route de déconnexion
@@ -107,18 +112,26 @@ Route::middleware(['auth'])->group(function () {
     
     // Routes pour les apprenants - Utilisation du middleware SimpleRoleCheck
     Route::prefix('apprenant')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('apprenant.dashboard');
-        })->name('apprenant.dashboard')->middleware('role:apprenant');
+        Route::get('/dashboard', [\App\Http\Controllers\Apprenant\DashboardController::class, 'index'])->name('apprenant.dashboard')->middleware('role:apprenant');
+        Route::get('/catalog', [\App\Http\Controllers\Apprenant\DashboardController::class, 'catalog'])->name('apprenant.catalog')->middleware('role:apprenant');
         
+        // Gestion de profil
+        Route::post('/profile', [\App\Http\Controllers\Apprenant\ProfileController::class, 'update'])->name('apprenant.profile.update')->middleware('role:apprenant');
+        
+        // Téléchargement Certificat
+        Route::get('/certificate/{course}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'download'])->name('apprenant.certificate.download')->middleware('role:apprenant');
+
         // Paiement et Visionnage
         Route::post('/checkout', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkout'])->name('apprenant.checkout');
         Route::get('/courses/{course}/watch', [\App\Http\Controllers\Apprenant\CourseController::class, 'watch'])->name('apprenant.courses.watch');
+        Route::post('/lessons/{lesson}/complete', [\App\Http\Controllers\Apprenant\CourseController::class, 'completeLesson'])->name('apprenant.lessons.complete');
+        Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Apprenant\CourseController::class, 'submitQuiz'])->name('apprenant.quizzes.submit');
     });
     
     // Routes pour les formateurs
     Route::prefix('formateur')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Formateur\DashboardController::class, 'index'])->name('formateur.dashboard')->middleware('role:formateur');
+        Route::get('/catalog', [\App\Http\Controllers\Formateur\DashboardController::class, 'catalog'])->name('formateur.catalog')->middleware('role:formateur');
         
         // Gestion de Profil
         Route::post('/profile', [\App\Http\Controllers\Formateur\ProfileController::class, 'update'])->name('formateur.profile.update')->middleware('role:formateur');
@@ -136,4 +149,12 @@ Route::middleware(['auth'])->group(function () {
             return view('admin.dashboard');
         })->name('admin.dashboard')->middleware('role:admin');
     });
+});
+
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.request');
+    Route::post('/forgot-password/send-code', [PasswordResetController::class, 'sendCode'])->name('password.send-code');
+    Route::post('/forgot-password/verify-code', [PasswordResetController::class, 'verifyCode'])->name('password.verify-code');
+    Route::post('/forgot-password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
+    Route::post('/forgot-password/resend-code', [PasswordResetController::class, 'resendCode'])->name('password.resend-code');
 });

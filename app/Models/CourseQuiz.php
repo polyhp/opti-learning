@@ -10,7 +10,7 @@ class CourseQuiz extends Model
     use HasFactory;
     
     protected $fillable = [
-        'course_id', 'title', 'description', 'passing_score'
+        'course_id', 'title', 'description', 'passing_score', 'type'
     ];
     
     public function course()

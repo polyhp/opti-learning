@@ -52,13 +52,18 @@
                         @enderror
                     </div>
                     
-                    <div class="mb-5">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <div class="mb-5 relative" x-data="{ show: false }">
+                        <label class="block text-sm font-medium text-navy-800 mb-2">
                             <i class="fas fa-lock text-orange-500 mr-2"></i>Mot de passe
                         </label>
-                        <input type="password" name="password" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition @error('password') border-red-500 @enderror"
-                            placeholder="••••••••">
+                        <div class="relative">
+                            <input type="password" name="password" id="password" required
+                                class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition text-navy-900 @error('password') border-red-500 @enderror"
+                                placeholder="••••••••">
+                            <button type="button" onclick="togglePassword('password', this)" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-orange-500 transition focus:outline-none">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         @error('password')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -69,7 +74,7 @@
                             <input type="checkbox" name="remember" class="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-500">
                             <span class="ml-2 text-sm text-gray-600">Se souvenir de moi</span>
                         </label>
-                        <a href="#" class="text-sm text-orange-500 hover:text-orange-600">
+                        <a href="{{ route('password.request') }}" class="text-sm text-orange-500 hover:text-orange-600">
                             Mot de passe oublié ?
                         </a>
                     </div>
@@ -78,6 +83,7 @@
                         <i class="fas fa-sign-in-alt mr-2"></i>Se connecter
                     </button>
                 </form>
+                
                 
                 <div class="mt-6 pt-6 border-t border-gray-200">
                     <div class="grid grid-cols-2 gap-3">
@@ -99,4 +105,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePassword(inputId, button) {
+        const input = document.getElementById(inputId);
+        const icon = button.querySelector('i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+</script>
 @endsection

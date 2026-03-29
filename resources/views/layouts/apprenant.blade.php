@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Tableau de bord Formateur - OptiLearning')</title>
+    <title>@yield('title', 'Tableau de bord Apprenant - OptiLearning')</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome -->
@@ -61,28 +61,26 @@
                     <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
                         <i class="fas fa-graduation-cap text-white text-xl"></i>
                     </div>
-                    <a href="{{ route('formateur.catalog') }}" class="text-2xl font-head font-bold text-white tracking-tight">
+                    <a href="{{ route('apprenant.dashboard') }}" class="text-2xl font-head font-bold text-white tracking-tight">
                         OPTI<span class="text-orange-500">LEARNING</span>
                     </a>
                 </div>
 
                 <!-- Center Menu -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('formateur.dashboard') }}" class="text-white border-b-2 border-orange-500 px-1 py-2 font-medium">Tableau de Bord</a>
-                    <a href="{{ route('formateur.catalog') }}" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Catalogue</a>
-                    <a href="{{ route('formateur.courses.create') }}" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Mes Formations</a>
-                    <a href="#" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Revenus</a>
+                    <a href="{{ route('apprenant.dashboard') }}" class="text-white hover:text-orange-500 transition-colors border-b-2 border-transparent hover:border-orange-500 px-1 py-2 font-medium">Mon Apprentissage</a>
+                    <a href="{{ route('apprenant.catalog') }}" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Catalogue</a>
                 </nav>
 
                 <!-- Right Nav -->
                 <div class="flex items-center space-x-6">
                     <!-- User Menu -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 cursor-pointer" onclick="document.getElementById('profileModal').classList.remove('hidden')">
                         <div class="text-right hidden sm:block">
                             <div class="text-sm font-semibold text-white">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
-                            <div class="text-xs text-orange-500 font-medium tracking-wider uppercase">Formateur</div>
+                            <div class="text-xs text-orange-500 font-medium tracking-wider uppercase">Apprenant</div>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-navy-700 border-2 border-navy-500 flex items-center justify-center text-white">
+                        <div class="w-10 h-10 rounded-full bg-navy-700 border-2 border-orange-500 flex items-center justify-center text-white font-bold">
                             {{ substr(Auth::user()->first_name, 0, 1) }}{{ substr(Auth::user()->last_name, 0, 1) }}
                         </div>
                     </div>
@@ -90,7 +88,7 @@
                     <!-- Logout -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200">
+                        <button type="submit" class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200" title="Me déconnecter">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </form>
@@ -128,8 +126,12 @@
 
     <!-- Footer -->
     <footer class="bg-navy-900 border-t border-navy-800 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-navy-300 text-sm">
-            &copy; {{ date('Y') }} OptiLearning. Espace Formateur Sécurisé. Tous droits réservés.
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-navy-300 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>&copy; {{ date('Y') }} OptiLearning. Espace Apprenant. Tous droits réservés.</div>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-white transition-colors">Support</a>
+                <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
+            </div>
         </div>
     </footer>
 

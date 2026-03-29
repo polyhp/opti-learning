@@ -46,4 +46,21 @@ class DashboardController extends Controller
             'formateur', 'totalCourses', 'recentCourses', 'orders', 'totalRevenue', 'totalSales'
         ));
     }
+
+    public function catalog(Request $request)
+    {
+        $search = $request->input('search');
+
+        $coursesQuery = Course::where('status', 'approved')
+            ->with(['category', 'formateur.user'])
+            ->withCount('lessons');
+
+        if ($search) {
+            $coursesQuery->where('title', 'like', "%{$search}%");
+        }
+
+        $courses = $coursesQuery->orderBy('created_at', 'desc')->get();
+
+        return view('formateur.catalog', compact('courses', 'search'));
+    }
 }

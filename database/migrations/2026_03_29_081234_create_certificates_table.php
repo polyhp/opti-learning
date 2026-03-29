@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('course_quizzes', function (Blueprint $table) {
+        Schema::create('certificates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->integer('passing_score')->default(10); // Standard passing score is 10/20
+            $table->string('certificate_code')->unique();
+            $table->timestamp('issued_at');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('course_quizzes');
+        Schema::dropIfExists('certificates');
     }
 };

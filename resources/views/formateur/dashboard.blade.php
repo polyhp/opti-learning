@@ -8,12 +8,12 @@
     <!-- Top Actions & Search -->
     <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-100 gap-4">
         <!-- Search bar -->
-        <div class="relative w-full md:w-1/3">
+        <form action="{{ route('formateur.catalog') }}" method="GET" class="relative w-full md:w-1/3">
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <i class="fas fa-search text-slate-400"></i>
             </div>
-            <input type="text" class="block w-full pl-11 pr-4 py-3 bg-slate-50 border-0 rounded-xl text-sm placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all outline-none" placeholder="Rechercher une formation...">
-        </div>
+            <input type="text" name="search" class="block w-full pl-11 pr-4 py-3 bg-slate-50 border-0 rounded-xl text-sm placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all outline-none" placeholder="Rechercher dans le catalogue...">
+        </form>
 
         <!-- Action Buttons -->
         <div class="flex items-center space-x-3 w-full md:w-auto">

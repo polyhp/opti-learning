@@ -31,7 +31,7 @@
     <header class="bg-navy-900 sticky top-0 z-50 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
-                <a href="{{ route('home') }}" class="flex items-center space-x-3">
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
                     <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-graduation-cap text-white text-xl"></i></div>
                     <span class="text-2xl font-head font-bold text-white">OPTI<span class="text-orange-500">LEARNING</span></span>
                 </a>
