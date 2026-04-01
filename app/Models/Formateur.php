@@ -30,16 +30,16 @@ class Formateur extends Model
 
     public function getDiplomaUrlAttribute()
     {
-        return $this->diploma_file ? asset('storage/formateur_documents/'.$this->diploma_file) : null;
+        return $this->diploma_file ? asset('storage/'.$this->diploma_file) : null;
     }
 
     public function getIdCardUrlAttribute()
     {
-        return $this->id_card_file ? asset('storage/formateur_documents/'.$this->id_card_file) : null;
+        return $this->id_card_file ? asset('storage/'.$this->id_card_file) : null;
     }
 
     public function getCertificateUrlAttribute()
     {
-        return $this->certificate_file ? asset('storage/formateur_documents/'.$this->certificate_file) : null;
+        return $this->certificate_file ? asset('storage/'.$this->certificate_file) : null;
     }
 }

@@ -36,11 +36,16 @@
                     <span class="text-2xl font-head font-bold text-white">OPTI<span class="text-orange-500">LEARNING</span></span>
                 </a>
                 <div class="flex items-center space-x-4">
-                    <a href="{{ route('dashboard') }}" class="text-white hover:text-orange-400 font-medium">Mon Espace</a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="text-slate-300 hover:text-white"><i class="fas fa-sign-out-alt"></i></button>
-                    </form>
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="text-white hover:text-orange-400 font-medium">Mon Espace</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="text-slate-300 hover:text-white" title="Déconnexion"><i class="fas fa-sign-out-alt"></i></button>
+                        </form>
+                    @else
+                        <a href="{{ route('login') }}" class="text-white hover:text-orange-400 font-medium font-head">Connexion</a>
+                        <a href="{{ route('register') }}" class="bg-orange-500 hover:bg-orange-600 px-5 py-2 rounded-full text-white font-medium font-head transition-colors shadow-md shadow-orange-500/20">Inscription</a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -164,14 +169,21 @@
                             <p class="text-center text-sm text-emerald-600 font-medium"><i class="fas fa-check-circle"></i> Vous possédez cette formation</p>
                         @else
                             <!-- Non payé -> Formulaire d'Achat Simulé -->
-                            <form action="{{ route('apprenant.checkout') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-xl shadow-xl shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-lg mb-4">
-                                    Payer {{ $course->price > 0 ? number_format($course->price, 0, ',', ' ') . ' FCFA' : 'Maintenant' }}
-                                </button>
-                            </form>
-                            <p class="text-center text-xs text-slate-400 mb-6">Paiement sécurisé par Mobile Money / Carte</p>
+                            @auth
+                                <form action="{{ route('apprenant.checkout') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                                    <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-xl shadow-xl shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-lg mb-4">
+                                        Payer {{ $course->price > 0 ? number_format($course->price, 0, ',', ' ') . ' FCFA' : 'Maintenant' }}
+                                    </button>
+                                </form>
+                                <p class="text-center text-xs text-slate-400 mb-6">Paiement sécurisé par Mobile Money / Carte</p>
+                            @else
+                                <a href="{{ route('login') }}" class="block w-full text-center bg-navy-800 hover:bg-navy-900 text-white font-bold py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 text-lg mb-4">
+                                    Se connecter pour acheter
+                                </a>
+                                <p class="text-center text-xs text-slate-400 mb-6">Vous devez avoir un compte pour acheter cette formation.</p>
+                            @endauth
                         @endif
 
                         <div class="space-y-3 pt-6 border-t border-slate-100 text-sm text-slate-600">

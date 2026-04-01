@@ -45,8 +45,8 @@ class CourseController extends Controller
         }
 
         if ($existingOrder && $existingOrder->status === 'pending') {
-            return redirect()->route('courses.show', $course->id)
-                ->with('info', 'Votre commande est toujours en attente de paiement.');
+            return redirect()->route('apprenant.payment.show', $existingOrder->id)
+                ->with('info', 'Reprise de votre commande en attente.');
         }
 
         // Le statut dépend du prix (gratuit = complété, sinon = en attente)
@@ -64,8 +64,7 @@ class CourseController extends Controller
                 ->with('success', 'Inscription réussie à cette formation gratuite !');
         }
         
-        return redirect()->route('courses.show', $course->id)
-            ->with('info', 'Commande enregistrée. L\'intégration du système de paiement est en cours de développement.');
+        return redirect()->route('apprenant.payment.show', $order->id);
     }
 
     /**

@@ -11,7 +11,7 @@ class Course extends Model
     
     protected $fillable = [
         'formateur_id', 'category_id', 'title', 'slug', 'description', 
-        'price', 'duration_minutes', 'thumbnail', 'status'
+        'price', 'duration_minutes', 'thumbnail', 'status', 'rejection_reason'
     ];
     
     public function formateur()

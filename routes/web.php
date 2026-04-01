@@ -61,8 +61,8 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     return view('welcome', compact('categories', 'recentCourses', 'popularCourses'));
 })->name('home');
 
-// Route de détail d'une formation (Nécessite connexion)
-Route::get('/formations/{course}', [\App\Http\Controllers\PublicCourseController::class, 'show'])->name('courses.show')->middleware('auth');
+// Route de détail d'une formation (Publique)
+Route::get('/formations/{course}', [\App\Http\Controllers\PublicCourseController::class, 'show'])->name('courses.show');
 
 // Route de vérification de certificat (Publique)
 Route::get('/verify/{code}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'verify'])->name('verify.certificate');
@@ -123,6 +123,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Paiement et Visionnage
         Route::post('/checkout', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkout'])->name('apprenant.checkout');
+        Route::get('/payment/{order}', [\App\Http\Controllers\Apprenant\PaymentController::class, 'show'])->name('apprenant.payment.show');
+        Route::get('/payment/verify/kkiapay', [\App\Http\Controllers\Apprenant\PaymentController::class, 'verify'])->name('apprenant.payment.verify');
         Route::get('/courses/{course}/watch', [\App\Http\Controllers\Apprenant\CourseController::class, 'watch'])->name('apprenant.courses.watch');
         Route::post('/lessons/{lesson}/complete', [\App\Http\Controllers\Apprenant\CourseController::class, 'completeLesson'])->name('apprenant.lessons.complete');
         Route::post('/quizzes/{quiz}/submit', [\App\Http\Controllers\Apprenant\CourseController::class, 'submitQuiz'])->name('apprenant.quizzes.submit');
@@ -144,10 +146,33 @@ Route::middleware(['auth'])->group(function () {
     });
     
     // Routes pour les admins
-    Route::prefix('admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard')->middleware('role:admin');
+    Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        
+        // Paramètres Profil Admin
+        Route::get('/profile', [\App\Http\Controllers\Admin\AdminController::class, 'editProfile'])->name('profile.edit');
+        Route::put('/profile', [\App\Http\Controllers\Admin\AdminController::class, 'updateProfile'])->name('profile.update');
+
+        // Nouveaux Administrateurs
+        Route::get('/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Admin\AdminController::class, 'store'])->name('store');
+
+        // Gestion des Utilisateurs (Apprenants & Formateurs)
+        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+        Route::post('/users/store', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+        Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.role');
+        Route::patch('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
+        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+
+        // Gestion des Formations
+        Route::get('/courses', [\App\Http\Controllers\Admin\CourseController::class, 'index'])->name('courses.index');
+        Route::get('/courses/{course}', [\App\Http\Controllers\Admin\CourseController::class, 'show'])->name('courses.show');
+        Route::patch('/courses/{course}/status', [\App\Http\Controllers\Admin\CourseController::class, 'updateStatus'])->name('courses.status');
+
+        // Suivi des Paiements
+        Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+        Route::get('/payments/export', [\App\Http\Controllers\Admin\PaymentController::class, 'export'])->name('payments.export');
     });
 });
 
@@ -158,3 +183,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/forgot-password/reset', [PasswordResetController::class, 'resetPassword'])->name('password.reset');
     Route::post('/forgot-password/resend-code', [PasswordResetController::class, 'resendCode'])->name('password.resend-code');
 });
+
+// Webhook Kkiapay
+Route::post('/kkiapay/webhook', [\App\Http\Controllers\Apprenant\PaymentController::class, 'webhook'])->name('kkiapay.webhook');

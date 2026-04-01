@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\SimpleRoleCheck::class,
         ]);
+        $middleware->validateCsrfTokens(except: [
+            'kkiapay/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
