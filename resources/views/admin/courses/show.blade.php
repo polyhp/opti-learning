@@ -148,12 +148,12 @@
         <div class="space-y-6">
             
             <!-- Actions de modération -->
-            <div class="bg-white rounded-xl shadow-sm border {{ $course->status === 'en_attente' ? 'border-yellow-300 ring-4 ring-yellow-50' : 'border-gray-200' }} p-6">
+            <div class="bg-white rounded-xl shadow-sm border {{ $course->status === 'pending' ? 'border-yellow-300 ring-4 ring-yellow-50' : 'border-gray-200' }} p-6">
                 <h3 class="text-lg font-bold text-gray-900 mb-4 pb-2 border-b border-gray-100">Statut de publication</h3>
                 
                 <div class="mb-6">
                     <p class="text-sm text-gray-500 mb-1">Statut actuel :</p>
-                    @if($course->status === 'en_attente')
+                    @if($course->status === 'pending')
                         <div class="flex items-center text-yellow-600 font-bold bg-yellow-50 px-3 py-2 rounded-lg">
                             <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2 animate-pulse"></span>
                             En attente de révision

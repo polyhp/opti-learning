@@ -14,12 +14,12 @@ class DashboardController extends Controller
             'formateurs' => \App\Models\User::where('role', 'formateur')->count(),
             'certificats' => \App\Models\Certificate::count(),
             'revenue' => \App\Models\Order::where('status', 'completed')->sum('amount'),
-            'pending_courses' => \App\Models\Course::where('status', 'en_attente')->count(),
+            'pending_courses' => \App\Models\Course::where('status', 'pending')->count(),
         ];
 
         // Liste des formations en attente
         $pendingCourses = \App\Models\Course::with(['formateur.user', 'category'])
-            ->where('status', 'en_attente')
+            ->where('status', 'pending')
             ->latest()
             ->take(5)
             ->get();

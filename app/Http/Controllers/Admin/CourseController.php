@@ -12,7 +12,7 @@ class CourseController extends Controller
         $status = $request->query('status');
         $query = \App\Models\Course::with(['formateur.user', 'category']);
 
-        if ($status && in_array($status, ['en_attente', 'approved', 'rejected'])) {
+        if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
             $query->where('status', $status);
         }
 

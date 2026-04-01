@@ -16,7 +16,7 @@
                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Filtrer par statut</label>
                 <select name="status" id="status" class="rounded-lg border-gray-300 focus:border-primary-orange focus:ring focus:ring-primary-orange/20 shadow-sm" onchange="this.form.submit()">
                     <option value="">Tous les statuts</option>
-                    <option value="en_attente" {{ $status == 'en_attente' ? 'selected' : '' }}>En attente</option>
+                    <option value="pending" {{ $status == 'pending' ? 'selected' : '' }}>En attente</option>
                     <option value="approved" {{ $status == 'approved' ? 'selected' : '' }}>Approuvée</option>
                     <option value="rejected" {{ $status == 'rejected' ? 'selected' : '' }}>Rejetée</option>
                 </select>
@@ -44,7 +44,7 @@
                     
                     <!-- Badge de statut -->
                     <div class="absolute top-3 right-3 shrink-0">
-                        @if($course->status === 'en_attente')
+                        @if($course->status === 'pending')
                             <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 border border-yellow-200">
                                 En attente
                             </span>

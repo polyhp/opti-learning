@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80">
+  <!-- Mark -->
+  <g transform="translate(10, 10)">
+    <!-- Navy Part -->
+    <path d="M35 15 C 15 15 15 35 15 50 C 15 65 15 85 35 85 C 45 85 45 70 45 50 C 45 30 45 15 35 15 Z" fill="#0B1A3E" transform="scale(0.6)"/>
+    <path d="M52 20 L 75 35 C 90 45 90 55 75 65 L 52 80 C 65 70 65 30 52 20 Z" fill="#F97316" transform="scale(0.6)"/>
+  </g>
+  <!-- Text -->
+  <text x="85" y="52" font-family="'Syne', 'Inter', 'Segoe UI', sans-serif" font-weight="800" font-size="34" font-style="italic" fill="#0B1A3E" letter-spacing="-0.5">Opti Learning</text>
+</svg>
