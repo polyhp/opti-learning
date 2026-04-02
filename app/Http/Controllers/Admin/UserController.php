@@ -40,6 +40,8 @@ class UserController extends Controller
             'is_active' => true,
         ]);
 
+        \App\Models\AdminActivityLog::log('Création Utilisateur', "A créé l'utilisateur: {$validated['email']} ({$validated['role']})");
+
         return back()->with('success', 'Utilisateur créé avec succès.');
     }
 
@@ -56,6 +58,8 @@ class UserController extends Controller
 
         $user->update(['role' => $validated['role']]);
 
+        \App\Models\AdminActivityLog::log('Modification Rôle', "A modifié le rôle de {$user->email} en {$validated['role']}");
+
         return back()->with('success', 'Rôle mis à jour.');
     }
 
@@ -68,6 +72,8 @@ class UserController extends Controller
         $user->update(['is_active' => !$user->is_active]);
         $status = $user->is_active ? 'activé' : 'désactivé';
 
+        \App\Models\AdminActivityLog::log('Modification Statut Utilisateur', "Le compte de {$user->email} a été $status.");
+
         return back()->with('success', "Le compte utilisateur a été $status.");
     }
 
@@ -78,6 +84,8 @@ class UserController extends Controller
         }
 
         $user->delete();
+
+        \App\Models\AdminActivityLog::log('Suppression Utilisateur', "A supprimé le compte de {$user->email}.");
 
         return back()->with('success', 'Utilisateur supprimé.');
     }

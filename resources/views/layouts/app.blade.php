@@ -95,9 +95,8 @@
                             </div>
 
                             <!-- Icône avec animation flottante -->
-                            <div
-                                class="w-11 h-11 bg-gradient-to-r from-[#FF6B35] to-[#FF8E5E] rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 animate-float">
-                                <i class="fas fa-graduation-cap text-white text-base"></i>
+                            <div class="w-11 h-11 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 animate-float">
+                                <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain drop-shadow-md">
                             </div>
 
                             <!-- Texte avec gradient -->

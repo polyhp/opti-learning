@@ -47,6 +47,9 @@ class CourseController extends Controller
 
         $message = $validated['status'] === 'approved' ? 'Formation approuvée avec succès.' : 'Formation rejetée, le formateur a été notifié.';
 
+        $statusStr = $validated['status'] === 'approved' ? 'approuvé' : 'rejeté';
+        \App\Models\AdminActivityLog::log('Modération Formation', "A $statusStr la formation: {$course->title}");
+
         return back()->with('success', $message);
     }
 }

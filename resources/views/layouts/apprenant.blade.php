@@ -58,8 +58,8 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain drop-shadow-md">
                     </div>
                     <a href="{{ route('apprenant.dashboard') }}" class="text-2xl font-head font-bold text-white tracking-tight">
                         OPTI<span class="text-orange-500">LEARNING</span>

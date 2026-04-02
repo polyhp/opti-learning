@@ -18,19 +18,26 @@ class AdminController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        \App\Models\User::create([
+        $user = \App\Models\User::create([
             'first_name' => $validated['first_name'],
             'last_name' => $validated['last_name'],
             'email' => $validated['email'],
-            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16)),
             'role' => 'admin',
-            'is_active' => true,
+            'is_active' => false,
         ]);
 
-        return redirect()->route('admin.users.index')->with('success', 'Administrateur créé avec succès.');
+        $url = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'admin.setup', now()->addHours(48), ['user' => $user->id]
+        );
+
+        \Illuminate\Support\Facades\Mail::to($user->email)->send(new \App\Mail\AdminInvitationMail($user, $url));
+
+        \App\Models\AdminActivityLog::log('Invitation Administrateur', "A invité {$user->email} en tant qu'administrateur.");
+
+        return redirect()->route('admin.users.index')->with('success', 'Invitation envoyée à l\'administrateur.');
     }
 
     public function editProfile()
@@ -63,6 +70,21 @@ class AdminController extends Controller
 
         $user->update($validated);
 
+        \App\Models\AdminActivityLog::log('Mise à jour Profil', "A mis à jour son profil administrateur.");
+
         return redirect()->route('admin.profile.edit')->with('success', 'Profil mis à jour avec succès.');
+    }
+    public function logs(Request $request)
+    {
+        $query = \App\Models\AdminActivityLog::with('user')->latest();
+        
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        $logs = $query->paginate(20)->withQueryString();
+        $date = $request->date;
+
+        return view('admin.logs.index', compact('logs', 'date'));
     }
 }

@@ -190,6 +190,104 @@
             </div>
         </div>
     </div>
+    
+    <!-- Section Espace Apprentissage -->
+    <div class="mt-12 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+            <h2 class="font-head text-lg font-bold text-navy-900"><i class="fas fa-graduation-cap mr-2 text-orange-500"></i>Mon Espace Apprentissage (En tant qu'apprenant)</h2>
+        </div>
+        <div class="p-6">
+            @if($myEnrolledCourses->count() > 0)
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    @foreach($myEnrolledCourses as $course)
+                    <div class="bg-white border text-left border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-orange-200 transition-all duration-300 group flex flex-col h-full relative">
+                        <!-- Image Container -->
+                        <div class="h-40 overflow-hidden relative bg-slate-100">
+                            @if($course->thumbnail)
+                                <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center bg-navy-50 text-navy-200">
+                                    <i class="fas fa-laptop-code text-4xl"></i>
+                                </div>
+                            @endif
+                            <!-- Overlay Date -->
+                            <div class="absolute top-2 right-2 bg-white/90 backdrop-blur text-navy-800 text-xs font-bold px-2 py-1 rounded-lg">
+                                Inscrit le {{ $course->order_date->format('d/m/Y') }}
+                            </div>
+                        </div>
+
+                        <!-- Content Container -->
+                        <div class="p-5 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-head font-bold text-lg text-navy-900 mb-1 line-clamp-2 leading-tight group-hover:text-orange-500 transition-colors">{{ $course->title }}</h3>
+                                <p class="text-sm text-slate-500 mb-4 flex items-center">
+                                    <i class="fas fa-chalkboard-teacher mr-2 text-slate-400"></i>
+                                    {{ $course->formateur->user->first_name }} {{ $course->formateur->user->last_name }}
+                                </p>
+                            </div>
+                            
+                            <!-- Progression & Stats -->
+                            <div class="space-y-4">
+                                <!-- Progress Bar -->
+                                <div>
+                                    <div class="flex justify-between items-center text-xs mb-1">
+                                        <span class="font-medium text-slate-600">Progrès des leçons</span>
+                                        <span class="font-bold {{ $course->custom_progress == 100 ? 'text-emerald-500' : 'text-orange-500' }}">{{ $course->custom_progress }}%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                                        <div class="h-full {{ $course->custom_progress == 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-orange-400 to-orange-500' }} rounded-full" style="width: {{ $course->custom_progress }}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Quiz Note -->
+                                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-clipboard-check {{ $course->custom_passed ? 'text-emerald-500' : 'text-slate-400' }}"></i>
+                                        <span class="text-xs font-semibold text-slate-600">Note Finale</span>
+                                    </div>
+                                    @if(!is_null($course->custom_score))
+                                        <span class="font-head font-bold text-sm {{ $course->custom_passed ? 'text-emerald-600' : 'text-red-500' }}">{{ $course->custom_score }}/20</span>
+                                    @else
+                                        <span class="text-xs text-orange-500 font-medium">À passer</span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Footer -->
+                        <div class="p-4 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center gap-2">
+                            <a href="{{ route('apprenant.courses.watch', $course->id) }}" class="flex-grow text-center bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
+                                {{ $course->custom_progress == 100 ? 'Réviser' : 'Continuer' }}
+                            </a>
+                            
+                            @if($course->can_download_certificate)
+                            <a href="{{ route('apprenant.certificate.download', $course->id) }}" class="flex-none bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 p-2.5 rounded-xl transition-colors" title="Télécharger le certificat PDF">
+                                <i class="fas fa-award text-lg"></i>
+                            </a>
+                            @else
+                                <button disabled class="flex-none bg-slate-100 text-slate-300 p-2.5 rounded-xl cursor-not-allowed" title="Le certificat n'est pas encore débloqué">
+                                    <i class="fas fa-lock text-lg"></i>
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="flex flex-col items-center justify-center py-12 text-center">
+                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 text-4xl mb-4">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-navy-900 mb-2">Aucune formation en cours</h3>
+                    <p class="text-slate-500 max-w-md mx-auto mb-6">Vous ne participez à aucune formation pour le moment. Explorez notre catalogue pour commencer votre apprentissage !</p>
+                    <a href="{{ route('formateur.catalog') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-medium transition-colors">
+                        Découvrir les formations
+                    </a>
+                </div>
+            @endif
+        </div>
+    </div>
+    
 </div>
 
 <!-- Modal Profile (Tailwind) -->

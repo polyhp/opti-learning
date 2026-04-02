@@ -174,7 +174,7 @@
                                     @csrf
                                     <input type="hidden" name="course_id" value="{{ $course->id }}">
                                     <button type="submit" class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-4 rounded-xl shadow-xl shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-lg mb-4">
-                                        Payer {{ $course->price > 0 ? number_format($course->price, 0, ',', ' ') . ' FCFA' : 'Maintenant' }}
+                                        {{ $course->price > 0 ? 'Payer ' . number_format($course->price, 0, ',', ' ') . ' FCFA' : "S'inscrire à la formation" }}
                                     </button>
                                 </form>
                                 <p class="text-center text-xs text-slate-400 mb-6">Paiement sécurisé par Mobile Money / Carte</p>

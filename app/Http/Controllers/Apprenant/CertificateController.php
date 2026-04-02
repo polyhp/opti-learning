@@ -19,7 +19,9 @@ class CertificateController extends Controller
 
         // 1. Check if user bought the course
         $isOrdered = $course->orders()->where('user_id', $user->id)->where('status', 'completed')->exists();
-        if (!$isOrdered) {
+        $isCreator = $user->hasRole('formateur') && $user->formateur && $course->formateur_id == $user->formateur->id;
+        
+        if (!$isOrdered && !$isCreator) {
             return back()->with('error', 'Vous devez avoir terminé cette formation pour obtenir un certificat.');
         }
 

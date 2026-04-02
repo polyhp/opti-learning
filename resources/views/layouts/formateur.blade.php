@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,9 @@
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -40,16 +43,42 @@
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif;
+        }
+
         /* Scrollbar styling */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
     </style>
     @stack('styles')
 </head>
+
 <body class="text-slate-800 antialiased h-screen flex flex-col">
 
     <!-- Header / Navbar -->
@@ -58,20 +87,25 @@
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                        <i class="fas fa-graduation-cap text-white text-xl"></i>
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo"
+                            class="w-full h-full object-contain drop-shadow-md">
                     </div>
-                    <a href="{{ route('formateur.catalog') }}" class="text-2xl font-head font-bold text-white tracking-tight">
-                        OPTI<span class="text-orange-500">LEARNING</span>
+                    <a href="{{ route('formateur.catalog') }}"
+                        class="text-2xl font-head font-bold text-white tracking-tight">
+                        OPTI-<span class="text-orange-500">LEARNING</span>
                     </a>
                 </div>
 
                 <!-- Center Menu -->
                 <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('formateur.dashboard') }}" class="text-white border-b-2 border-orange-500 px-1 py-2 font-medium">Tableau de Bord</a>
-                    <a href="{{ route('formateur.catalog') }}" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Catalogue</a>
-                    <a href="{{ route('formateur.courses.create') }}" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Mes Formations</a>
-                    <a href="#" class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Revenus</a>
+                    <a href="{{ route('formateur.dashboard') }}"
+                        class="text-white border-b-2 border-orange-500 px-1 py-2 font-medium">Tableau de Bord</a>
+                    <a href="{{ route('formateur.catalog') }}"
+                        class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Catalogue</a>
+                    <a href="{{ route('formateur.courses.create') }}"
+                        class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Mes
+                        Formations</a>
                 </nav>
 
                 <!-- Right Nav -->
@@ -79,18 +113,21 @@
                     <!-- User Menu -->
                     <div class="flex items-center space-x-3">
                         <div class="text-right hidden sm:block">
-                            <div class="text-sm font-semibold text-white">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                            <div class="text-sm font-semibold text-white">{{ Auth::user()->first_name }}
+                                {{ Auth::user()->last_name }}</div>
                             <div class="text-xs text-orange-500 font-medium tracking-wider uppercase">Formateur</div>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-navy-700 border-2 border-navy-500 flex items-center justify-center text-white">
+                        <div
+                            class="w-10 h-10 rounded-full bg-navy-700 border-2 border-navy-500 flex items-center justify-center text-white">
                             {{ substr(Auth::user()->first_name, 0, 1) }}{{ substr(Auth::user()->last_name, 0, 1) }}
                         </div>
                     </div>
-                    
+
                     <!-- Logout -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200">
+                        <button type="submit"
+                            class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </form>
@@ -101,29 +138,31 @@
 
     <!-- Main Content Area -->
     <div class="flex-grow flex flex-col md:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
-        
+
         <!-- Alerts -->
         @if(session('success'))
-        <div class="fixed bottom-4 right-4 bg-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center animate-bounce" id="toast">
-            <i class="fas fa-check-circle text-2xl mr-3"></i>
-            <div>
-                <h4 class="font-bold">Succès</h4>
-                <p class="text-sm opacity-90">{{ session('success') }}</p>
+            <div class="fixed bottom-4 right-4 bg-emerald-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center animate-bounce"
+                id="toast">
+                <i class="fas fa-check-circle text-2xl mr-3"></i>
+                <div>
+                    <h4 class="font-bold">Succès</h4>
+                    <p class="text-sm opacity-90">{{ session('success') }}</p>
+                </div>
             </div>
-        </div>
         @endif
         @if(session('error'))
-        <div class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center" id="toast-error">
-            <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
-            <div>
-                <h4 class="font-bold">Erreur</h4>
-                <p class="text-sm opacity-90">{{ session('error') }}</p>
+            <div class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl z-50 flex items-center"
+                id="toast-error">
+                <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
+                <div>
+                    <h4 class="font-bold">Erreur</h4>
+                    <p class="text-sm opacity-90">{{ session('error') }}</p>
+                </div>
             </div>
-        </div>
         @endif
 
         @yield('content')
-        
+
     </div>
 
     <!-- Footer -->
@@ -136,11 +175,12 @@
     <script>
         setTimeout(() => {
             let toast = document.getElementById('toast');
-            if(toast) { toast.style.display = 'none'; }
+            if (toast) { toast.style.display = 'none'; }
             let toastErr = document.getElementById('toast-error');
-            if(toastErr) { toastErr.style.display = 'none'; }
+            if (toastErr) { toastErr.style.display = 'none'; }
         }, 5000);
     </script>
     @stack('scripts')
 </body>
+
 </html>

@@ -119,7 +119,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/profile', [\App\Http\Controllers\Apprenant\ProfileController::class, 'update'])->name('apprenant.profile.update')->middleware('role:apprenant');
         
         // Téléchargement Certificat
-        Route::get('/certificate/{course}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'download'])->name('apprenant.certificate.download')->middleware('role:apprenant');
+        Route::get('/certificate/{course}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'download'])->name('apprenant.certificate.download');
 
         // Paiement et Visionnage
         Route::post('/checkout', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkout'])->name('apprenant.checkout');
@@ -143,6 +143,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/courses/create', [\App\Http\Controllers\Formateur\CourseController::class, 'create'])->name('formateur.courses.create')->middleware('role:formateur');
         Route::post('/courses', [\App\Http\Controllers\Formateur\CourseController::class, 'store'])->name('formateur.courses.store')->middleware('role:formateur');
         Route::get('/courses/{course}', [\App\Http\Controllers\Formateur\CourseController::class, 'show'])->name('formateur.courses.show')->middleware('role:formateur');
+        Route::get('/courses/{course}/edit', [\App\Http\Controllers\Formateur\CourseController::class, 'edit'])->name('formateur.courses.edit')->middleware('role:formateur');
+        Route::put('/courses/{course}', [\App\Http\Controllers\Formateur\CourseController::class, 'update'])->name('formateur.courses.update')->middleware('role:formateur');
     });
     
     // Routes pour les admins
@@ -157,6 +159,10 @@ Route::middleware(['auth'])->group(function () {
         // Nouveaux Administrateurs
         Route::get('/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('create');
         Route::post('/store', [\App\Http\Controllers\Admin\AdminController::class, 'store'])->name('store');
+        
+        // Journal des activités
+        Route::get('/logs', [\App\Http\Controllers\Admin\AdminController::class, 'logs'])->name('logs.index');
+        
 
         // Gestion des Utilisateurs (Apprenants & Formateurs)
         Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
@@ -175,6 +181,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/payments/export', [\App\Http\Controllers\Admin\PaymentController::class, 'export'])->name('payments.export');
     });
 });
+
+// Configuration du compte Admin
+Route::get('/admin/setup/{user}', [\App\Http\Controllers\Admin\AdminSetupController::class, 'show'])->name('admin.setup')->middleware('signed');
+Route::post('/admin/setup/{user}', [\App\Http\Controllers\Admin\AdminSetupController::class, 'confirm'])->name('admin.setup.confirm')->middleware('signed');
 
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', [PasswordResetController::class, 'showForgotForm'])->name('password.request');

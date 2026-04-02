@@ -1754,7 +1754,11 @@
               @foreach($searchResults as $course)
                 <div class="course-card">
                   <div class="card-thumb" style="overflow: hidden; position: relative;">
-                    @if($course->thumbnail)
+                    @if($course->cover_video)
+                        <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
+                            <source src="{{ asset($course->cover_video) }}" type="video/mp4">
+                        </video>
+                    @elseif($course->thumbnail)
                       <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
                         style="width: 100%; height: 100%; object-fit: cover;">
                     @else
@@ -1862,7 +1866,11 @@
             @forelse($recentCourses as $course)
               <div class="course-card">
                 <div class="card-thumb" style="overflow: hidden; position: relative;">
-                  @if($course->thumbnail)
+                  @if($course->cover_video)
+                      <video autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;">
+                          <source src="{{ asset($course->cover_video) }}" type="video/mp4">
+                      </video>
+                  @elseif($course->thumbnail)
                     <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
                       style="width: 100%; height: 100%; object-fit: cover;">
                   @else

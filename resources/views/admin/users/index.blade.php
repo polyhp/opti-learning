@@ -164,55 +164,66 @@
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div x-show="showCreateModal" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" @click="showCreateModal = false"></div>
             <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div x-show="showCreateModal" x-transition.scale.origin.bottom class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full">
+            <div x-show="showCreateModal" x-transition.scale.origin.bottom class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full relative">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#0A2647] to-[#1E3A5F]"></div>
                 <form action="{{ route('admin.users.store') }}" method="POST">
                     @csrf
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 border-b border-gray-100">
-                        <h3 class="text-xl font-bold text-primary-dark mb-4">Ajouter un utilisateur</h3>
+                    <div class="bg-white px-6 pt-8 pb-6 border-b border-gray-100">
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 rounded-full bg-[#0A2647]/10 flex items-center justify-center mr-4">
+                                <i class="fas fa-user-plus text-[#0A2647]"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-[#0A2647]">Ajouter un utilisateur</h3>
+                        </div>
                         
-                        <div class="grid grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-5 mb-5">
                             <!-- Prénom -->
                             <div>
-                                <label for="first_name" class="block text-sm text-gray-700 mb-1">Prénom</label>
-                                <input type="text" id="first_name" name="first_name" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm" value="{{ old('first_name') }}">
+                                <label for="first_name" class="block text-sm font-semibold text-gray-700 mb-1">Prénom <span class="text-red-500">*</span></label>
+                                <input type="text" id="first_name" name="first_name" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all" value="{{ old('first_name') }}">
                             </div>
                             <!-- Nom -->
                             <div>
-                                <label for="last_name" class="block text-sm text-gray-700 mb-1">Nom</label>
-                                <input type="text" id="last_name" name="last_name" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm" value="{{ old('last_name') }}">
+                                <label for="last_name" class="block text-sm font-semibold text-gray-700 mb-1">Nom <span class="text-red-500">*</span></label>
+                                <input type="text" id="last_name" name="last_name" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all" value="{{ old('last_name') }}">
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <label for="email" class="block text-sm text-gray-700 mb-1">Email</label>
-                            <input type="email" id="email" name="email" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm" value="{{ old('email') }}">
+                        <div class="mb-5">
+                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input type="email" id="email" name="email" required class="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all" value="{{ old('email') }}" placeholder="exemple@opti-learning.com">
+                            </div>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-4 mt-4">
+                        <div class="grid grid-cols-2 gap-5 mb-5">
                             <!-- Password -->
                             <div>
-                                <label for="password" class="block text-sm text-gray-700 mb-1">Mot de passe</label>
-                                <input type="password" id="password" name="password" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm">
+                                <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Mot de passe <span class="text-red-500">*</span></label>
+                                <input type="password" id="password" name="password" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all">
                             </div>
                             <!-- Confirm password -->
                             <div>
-                                <label for="password_confirmation" class="block text-sm text-gray-700 mb-1">Confirmer mot de passe</label>
-                                <input type="password" id="password_confirmation" name="password_confirmation" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm">
+                                <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-1">Confirmer mot de passe <span class="text-red-500">*</span></label>
+                                <input type="password" id="password_confirmation" name="password_confirmation" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all">
                             </div>
                         </div>
 
-                        <div class="mt-4">
-                            <label for="new_user_role" class="block text-sm text-gray-700 mb-1">Rôle initial</label>
-                            <select name="role" id="new_user_role" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-primary-orange/20 shadow-sm">
+                        <div>
+                            <label for="new_user_role" class="block text-sm font-semibold text-gray-700 mb-1">Rôle initial</label>
+                            <select name="role" id="new_user_role" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:border-[#FF6B35] focus:ring focus:ring-[#FF6B35]/20 shadow-sm transition-all">
                                 <option value="apprenant">Apprenant</option>
                                 <option value="formateur">Formateur</option>
                                 <option value="admin">Administrateur</option>
                             </select>
                         </div>
                     </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 flex justify-end space-x-3">
-                        <button type="button" @click="showCreateModal = false" class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors">Annuler</button>
-                        <button type="submit" class="px-4 py-2 bg-primary-orange text-white rounded-lg hover:bg-opacity-90 transition-colors shadow-sm">Enregistrer</button>
+                    <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3 rounded-b-2xl items-center">
+                        <button type="button" @click="showCreateModal = false" class="px-5 py-2.5 border border-gray-300 rounded-xl shadow-sm bg-white font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-all">Annuler</button>
+                        <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-[#0A2647] to-[#1E3A5F] text-white font-bold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all">Ajouter l'utilisateur</button>
                     </div>
                 </form>
             </div>

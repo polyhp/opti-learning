@@ -15,8 +15,8 @@
         <div class="relative w-full max-w-md">
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-4">
-                        <i class="fas fa-graduation-cap text-3xl text-white"></i>
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-4 p-2">
+                        <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain drop-shadow-md">
                     </div>
                     <h2 class="text-2xl font-bold text-white">OPTI-LEARNING</h2>
                     <p class="text-orange-100 mt-2">Connectez-vous à votre compte</p>

@@ -23,8 +23,8 @@
     <div class="relative w-full max-w-6xl">
         <!-- Header avec animation -->
         <div class="text-center mb-12 animate-fade-in-up">
-            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mb-6 shadow-xl transform rotate-3 hover:rotate-6 transition duration-300">
-                <i class="fas fa-graduation-cap text-4xl text-white"></i>
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-white/10 p-2 backdrop-blur-md rounded-2xl mb-6 shadow-xl transform rotate-3 hover:rotate-6 transition duration-300">
+                <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain drop-shadow-md">
             </div>
             <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 text-shadow">
                 Bienvenue sur <span class="text-orange-500">OPTI-LEARNING</span>

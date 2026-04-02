@@ -36,7 +36,7 @@
     
     @if($course->status !== 'approved')
     <div class="mt-6 md:mt-0 flex-shrink-0">
-        <a href="{{ route('formateur.dashboard') }}" class="bg-navy-900 hover:bg-navy-800 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg flex items-center border border-navy-700">
+        <a href="{{ route('formateur.courses.edit', $course) }}" class="bg-navy-900 hover:bg-navy-800 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg flex items-center border border-navy-700">
             <i class="fas fa-pen-nib mr-2"></i> Modifier la formation
         </a>
     </div>
@@ -59,6 +59,19 @@
         <!-- Conteneur du Lecteur (Masterclass) -->
         <div class="bg-navy-950 rounded-3xl shadow-xl overflow-hidden relative group border border-navy-900">
             <div class="aspect-video w-full relative flex items-center justify-center bg-black" id="player-container">
+                @if($course->cover_video)
+                    <div id="cover-video-layer" class="w-full h-full absolute inset-0 z-20 bg-black cursor-pointer group/video" onclick="document.getElementById('cover-video-layer').style.display='none'; const p = document.getElementById('main-player'); if(p) p.play();">
+                        <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                            <source src="{{ asset($course->cover_video) }}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover/video:opacity-100 transition-opacity">
+                            <div class="bg-orange-500 text-white w-20 h-20 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(249,115,22,0.6)] transform transition-transform scale-90 group-hover/video:scale-100">
+                                <i class="fas fa-play text-3xl ml-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                
                 @if($course->lessons->count() > 0)
                     @if($firstVideo)
                         <video id="main-player" controls class="w-full h-full outline-none" poster="{{ $course->thumbnail ? asset($course->thumbnail) : '' }}">
@@ -385,6 +398,9 @@ function previewLesson(btn) {
     
     document.getElementById('current-video-title').textContent = title;
     
+    const coverVideo = document.getElementById('cover-video-layer');
+    if (coverVideo) coverVideo.style.display = 'none';
+
     const quizPreview = document.getElementById('quiz-placeholder');
     if (quizPreview) {
         quizPreview.style.display = 'none';
@@ -453,6 +469,9 @@ function previewQuiz(type, btn) {
     
     document.getElementById('current-video-title').textContent = type === 'standard' ? 'Examen Standard' : 'Session Rattrapage';
     
+    const coverVideo = document.getElementById('cover-video-layer');
+    if (coverVideo) coverVideo.style.display = 'none';
+
     const player = document.getElementById('main-player');
     if (player) {
         player.pause();

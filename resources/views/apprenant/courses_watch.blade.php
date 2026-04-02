@@ -33,12 +33,12 @@
     <!-- Navbar -->
     <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-4 sm:px-6 flex-shrink-0 shadow-sm z-50">
         <div class="flex items-center space-x-4">
-            <a href="{{ route('apprenant.dashboard') }}" class="flex items-center space-x-2">
+            <a href="{{ Auth::user()->hasRole('formateur') ? route('formateur.dashboard') : route('apprenant.dashboard') }}" class="flex items-center space-x-2">
                 <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center shadow-md"><i class="fas fa-graduation-cap text-white text-sm"></i></div>
                 <span class="text-xl font-head font-bold text-navy-900 hidden sm:block">OPTI<span class="text-orange-500">LEARNING</span></span>
             </a>
             <div class="h-6 w-px bg-slate-300 mx-2 hidden sm:block"></div>
-            <a href="{{ route('apprenant.dashboard') }}" class="text-slate-500 hover:text-navy-900 transition-colors text-sm font-medium flex items-center">
+            <a href="{{ Auth::user()->hasRole('formateur') ? route('formateur.dashboard') : route('apprenant.dashboard') }}" class="text-slate-500 hover:text-navy-900 transition-colors text-sm font-medium flex items-center">
                 <i class="fas fa-arrow-left mr-2"></i>Mon espace
             </a>
             <div class="h-6 w-px bg-slate-300 mx-2"></div>
@@ -106,7 +106,7 @@
                                         <div class="mt-6 p-4 bg-emerald-500/20 border-emerald-500/50 border rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.1)]">
                                             <span class="text-lg font-bold text-emerald-300">🎉 Félicitations ! Vous avez validé la formation !</span>
                                         </div>
-                                        <a href="{{ route('apprenant.dashboard') }}" class="inline-block mt-6 px-6 py-3 bg-white text-navy-900 font-bold rounded-lg hover:bg-slate-200">Retour au Tableau de Bord</a>
+                                        <a href="{{ Auth::user()->hasRole('formateur') ? route('formateur.dashboard') : route('apprenant.dashboard') }}" class="inline-block mt-6 px-6 py-3 bg-white text-navy-900 font-bold rounded-lg hover:bg-slate-200">Retour au Tableau de Bord</a>
                                     </div>
                                 @else
                                     <!-- Formulaire Quiz Standard -->
@@ -150,7 +150,7 @@
                                                 <div class="mt-6 p-4 bg-emerald-500/20 border-emerald-500/50 border rounded-xl">
                                                     <span class="text-lg font-bold text-emerald-300">🎉 Félicitations ! Vous avez validé votre rattrapage !</span>
                                                 </div>
-                                                <a href="{{ route('apprenant.dashboard') }}" class="inline-block mt-6 px-6 py-3 bg-white text-navy-900 font-bold rounded-lg hover:bg-slate-200">Retour au Tableau de Bord</a>
+                                                <a href="{{ Auth::user()->hasRole('formateur') ? route('formateur.dashboard') : route('apprenant.dashboard') }}" class="inline-block mt-6 px-6 py-3 bg-white text-navy-900 font-bold rounded-lg hover:bg-slate-200">Retour au Tableau de Bord</a>
                                             </div>
                                         @else
                                             <!-- Formulaire Rattrapage -->
