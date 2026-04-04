@@ -15,19 +15,25 @@ use App\Models\Category;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         if (!$user->formateur) {
             abort(403, 'Profil formateur introuvable.');
         }
 
-        $courses = Course::where('formateur_id', $user->formateur->id)
-            ->withCount('lessons')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
+        $search = $request->query('search');
 
-        return view('formateur.courses_index', compact('courses'));
+        $query = Course::where('formateur_id', $user->formateur->id)
+            ->withCount('lessons');
+
+        if ($search) {
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $courses = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
+
+        return view('formateur.courses_index', compact('courses', 'search'));
     }
 
     public function create()

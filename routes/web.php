@@ -29,8 +29,13 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
                   ->orWhereHas('category', function($q2) use ($search) {
                       $q2->where('name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('formateur.user', function($q3) use ($search) {
+                      $q3->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%");
                   });
             });
         }
@@ -156,29 +161,35 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/profile', [\App\Http\Controllers\Admin\AdminController::class, 'editProfile'])->name('profile.edit');
         Route::put('/profile', [\App\Http\Controllers\Admin\AdminController::class, 'updateProfile'])->name('profile.update');
 
-        // Nouveaux Administrateurs
+        // Nouveaux Administrateurs (Super Admin Uniquement)
         Route::get('/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('create');
         Route::post('/store', [\App\Http\Controllers\Admin\AdminController::class, 'store'])->name('store');
-        
-        // Journal des activités
         Route::get('/logs', [\App\Http\Controllers\Admin\AdminController::class, 'logs'])->name('logs.index');
-        
 
         // Gestion des Utilisateurs (Apprenants & Formateurs)
-        Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
-        Route::post('/users/store', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
-        Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.role');
-        Route::patch('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
-        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        Route::middleware('can:manage-users')->group(function () {
+            Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+            Route::post('/users/store', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('users.store');
+            Route::get('/users/{user}/edit', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('users.edit');
+            Route::put('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
+            Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.role');
+            Route::patch('/users/{user}/permissions', [\App\Http\Controllers\Admin\UserController::class, 'updatePermissions'])->name('users.permissions');
+            Route::patch('/users/{user}/toggle', [\App\Http\Controllers\Admin\UserController::class, 'toggleStatus'])->name('users.toggle');
+            Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('users.destroy');
+        });
 
         // Gestion des Formations
-        Route::get('/courses', [\App\Http\Controllers\Admin\CourseController::class, 'index'])->name('courses.index');
-        Route::get('/courses/{course}', [\App\Http\Controllers\Admin\CourseController::class, 'show'])->name('courses.show');
-        Route::patch('/courses/{course}/status', [\App\Http\Controllers\Admin\CourseController::class, 'updateStatus'])->name('courses.status');
+        Route::middleware('can:manage-courses')->group(function () {
+            Route::get('/courses', [\App\Http\Controllers\Admin\CourseController::class, 'index'])->name('courses.index');
+            Route::get('/courses/{course}', [\App\Http\Controllers\Admin\CourseController::class, 'show'])->name('courses.show');
+            Route::patch('/courses/{course}/status', [\App\Http\Controllers\Admin\CourseController::class, 'updateStatus'])->name('courses.status');
+        });
 
         // Suivi des Paiements
-        Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
-        Route::get('/payments/export', [\App\Http\Controllers\Admin\PaymentController::class, 'export'])->name('payments.export');
+        Route::middleware('can:manage-payments')->group(function () {
+            Route::get('/payments', [\App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('payments.index');
+            Route::get('/payments/export', [\App\Http\Controllers\Admin\PaymentController::class, 'export'])->name('payments.export');
+        });
     });
 });
 

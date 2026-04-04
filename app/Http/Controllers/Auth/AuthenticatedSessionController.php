@@ -28,11 +28,22 @@ class AuthenticatedSessionController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+            $user = Auth::user();
+            
+            // Check if user is suspended/inactive
+            if (!$user->is_active) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                
+                throw ValidationException::withMessages([
+                    'email' => __('Votre compte a été suspendu ou désactivé. Veuillez contacter l\'administration.'),
+                ]);
+            }
+            
             $request->session()->regenerate();
             
             // Redirection basée sur le rôle
-            $user = Auth::user();
-            
             if ($user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->hasRole('formateur')) {

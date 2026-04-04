@@ -11,6 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->web(append: [
+            \App\Http\Middleware\PreventBackHistory::class,
+            \App\Http\Middleware\EnforceAccountInterface::class,
+        ]);
         $middleware->alias([
             'role' => \App\Http\Middleware\SimpleRoleCheck::class,
         ]);

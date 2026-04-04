@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <title>Certificat - {{ $course->title }}</title>
@@ -7,19 +8,29 @@
         @page {
             margin: 0px;
         }
+
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             margin: 0px;
             padding: 0px;
             line-height: 1.5;
-            background-color: #0B1A3E; /* Fond externe Bleu-nuit */
+            background-color: #0B1A3E;
+            /* Fond externe Bleu-nuit */
         }
+
         .page-wrap {
-            padding: 25px;
+            padding: 20px;
             width: 100%;
-            height: 100vh;
+            height: 100%;
             box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            overflow: hidden;
         }
+
         .border-orange {
             border: 4px solid #F97316;
             height: 100%;
@@ -27,7 +38,9 @@
             box-sizing: border-box;
             background-color: #ffffff;
             position: relative;
+            overflow: hidden;
         }
+
         /* Décorations de coin */
         .decor-top-left {
             position: absolute;
@@ -38,6 +51,7 @@
             border-top: 6px solid #0B1A3E;
             border-left: 6px solid #0B1A3E;
         }
+
         .decor-bottom-right {
             position: absolute;
             bottom: 20px;
@@ -47,7 +61,7 @@
             border-bottom: 6px solid #0B1A3E;
             border-right: 6px solid #0B1A3E;
         }
-        
+
         .watermark {
             position: absolute;
             top: 300px;
@@ -61,89 +75,96 @@
         }
 
         .content {
-            padding: 50px;
+            padding: 70px 50px 0 50px;
             text-align: center;
             z-index: 10;
             position: relative;
         }
+
         .header {
             margin-bottom: 25px;
             width: 100%;
             text-align: center;
         }
+
         .logo {
             font-size: 32px;
             font-weight: bold;
             color: #0B1A3E;
             letter-spacing: 2px;
         }
+
         .logo-accent {
             color: #F97316;
         }
-        
+
         .title {
-            font-size: 55px;
+            font-size: 45px;
             text-transform: uppercase;
             letter-spacing: 6px;
             margin-bottom: 10px;
             color: #0B1A3E;
             font-family: 'Georgia', serif;
         }
+
         .subtitle {
-            font-size: 16px;
+            font-size: 14px;
             color: #F97316;
             text-transform: uppercase;
             letter-spacing: 4px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             font-weight: bold;
         }
-        
+
         .presented-to {
-            font-size: 20px;
+            font-size: 16px;
             margin-bottom: 15px;
             color: #475569;
         }
+
         .student-name {
-            font-size: 46px;
+            font-size: 38px;
             color: #0B1A3E;
             font-family: 'Georgia', serif;
             font-style: italic;
             border-bottom: 2px solid #F97316;
             display: inline-block;
             padding-bottom: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             min-width: 450px;
         }
-        
+
         .description {
-            font-size: 18px;
+            font-size: 16px;
             margin: 0 auto;
             max-width: 800px;
             color: #475569;
         }
+
         .course-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: #0B1A3E;
-            margin: 20px 0 25px 0;
+            margin: 15px 0 20px 0;
             font-family: 'Georgia', serif;
         }
-        
+
         .score-box {
             display: inline-block;
             background-color: #0B1A3E;
             color: #ffffff;
-            padding: 10px 30px;
+            padding: 8px 25px;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             margin-bottom: 20px;
         }
+
         .score-box span {
             color: #F97316;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 18px;
         }
-        
+
         .footer {
             margin-top: 50px;
             width: 100%;
@@ -151,32 +172,37 @@
             bottom: 60px;
             left: 0;
         }
+
         .signature-table {
             width: 85%;
             margin: 0 auto;
         }
+
         .signature-table td {
             width: 33%;
             text-align: center;
             vertical-align: bottom;
         }
+
         .signature-line {
             width: 80%;
             margin: 0 auto;
             border-bottom: 1px solid #0B1A3E;
             margin-bottom: 15px;
         }
+
         .signature-name {
             font-weight: bold;
             font-size: 18px;
             color: #0B1A3E;
         }
+
         .signature-title {
             font-size: 14px;
             color: #F97316;
             margin-top: 5px;
         }
-        
+
         /* Médaille centrale */
         .medal {
             width: 120px;
@@ -187,6 +213,7 @@
             text-align: center;
             border: 5px double #F97316;
         }
+
         .medal-content {
             color: #ffffff;
             font-weight: bold;
@@ -194,6 +221,7 @@
             margin-top: 40px;
             text-transform: uppercase;
         }
+
         .medal-accent {
             color: #F97316;
             font-size: 16px;
@@ -207,6 +235,7 @@
             color: #64748b;
             text-align: left;
         }
+
         .qr-code {
             position: absolute;
             bottom: 20px;
@@ -214,19 +243,28 @@
         }
     </style>
 </head>
+
 <body>
     <div class="page-wrap">
         <div class="border-orange">
             <div class="decor-top-left"></div>
             <div class="decor-bottom-right"></div>
-            
+
             <div class="watermark">
                 EXCELLENCE ACADÉMIQUE
             </div>
 
             <div class="content">
                 <div class="header">
-                    <div class="logo">OPTI<span class="logo-accent">LEARNING</span></div>
+                    @php
+                        $logoPath = public_path('images/logo.jpg');
+                        if(file_exists($logoPath)) {
+                            $logoData = base64_encode(file_get_contents($logoPath));
+                            echo '<img src="data:image/jpeg;base64,'.$logoData.'" alt="OptiLearning" style="height: 60px; object-fit: contain;">';
+                        } else {
+                            echo '<div class="logo">OPTI<span class="logo-accent">LEARNING</span></div>';
+                        }
+                    @endphp
                 </div>
 
                 <div class="title">Certificat de Réussite</div>
@@ -236,7 +274,8 @@
                 <div class="student-name">{{ $user->first_name }} {{ $user->last_name }}</div>
 
                 <div class="description">
-                    En reconnaissance de son engagement et pour avoir complété avec succès toutes les exigences du cours professionnel certifiant :
+                    En reconnaissance de son engagement et pour avoir complété avec succès toutes les exigences du cours
+                    professionnel certifiant :
                 </div>
 
                 <div class="course-title">« {{ $course->title }} »</div>
@@ -251,7 +290,8 @@
                     <tr>
                         <td>
                             <div class="signature-line"></div>
-                            <div class="signature-name">{{ $course->formateur->user->first_name }} {{ $course->formateur->user->last_name }}</div>
+                            <div class="signature-name">{{ $course->formateur->user->first_name }}
+                                {{ $course->formateur->user->last_name }}</div>
                             <div class="signature-title">Instructeur Principal</div>
                         </td>
                         <td>
@@ -265,7 +305,8 @@
                         <td>
                             <div class="signature-line"></div>
                             <div class="signature-name">Direction OptiLearning</div>
-                            <div class="signature-title">Délivré le {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d/m/Y') }}</div>
+                            <div class="signature-title">Délivré le
+                                {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d/m/Y') }}</div>
                         </td>
                     </tr>
                 </table>
@@ -277,9 +318,11 @@
             </div>
 
             <div class="qr-code">
-                <img src="data:image/svg+xml;base64,{{ $qrcode }}" width="80" height="80" alt="QR Code" style="border: 2px solid #0B1A3E; padding: 2px;">
+                <img src="data:image/svg+xml;base64,{{ $qrcode }}" width="80" height="80" alt="QR Code"
+                    style="border: 2px solid #0B1A3E; padding: 2px;">
             </div>
         </div>
     </div>
 </body>
+
 </html>

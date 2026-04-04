@@ -10,10 +10,23 @@ class PaymentController extends Controller
     public function index(Request $request)
     {
         $status = $request->query('status');
+        $search = $request->query('search');
         $query = \App\Models\Order::with(['user', 'course']);
 
         if ($status && in_array($status, ['pending', 'completed', 'failed', 'refunded'])) {
             $query->where('status', $status);
+        }
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->whereHas('user', function($q2) use ($search) {
+                    $q2->where('first_name', 'like', "%{$search}%")
+                       ->orWhere('last_name', 'like', "%{$search}%")
+                       ->orWhere('email', 'like', "%{$search}%");
+                })->orWhereHas('course', function($q3) use ($search) {
+                    $q3->where('title', 'like', "%{$search}%");
+                });
+            });
         }
 
         $payments = $query->latest()->paginate(15)->withQueryString();
@@ -23,7 +36,7 @@ class PaymentController extends Controller
                             ->whereMonth('created_at', now()->month)
                             ->sum('amount');
 
-        return view('admin.payments.index', compact('payments', 'status', 'totalRevenue', 'monthlyRevenue'));
+        return view('admin.payments.index', compact('payments', 'status', 'search', 'totalRevenue', 'monthlyRevenue'));
     }
 
     public function export()

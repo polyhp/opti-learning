@@ -10,15 +10,28 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $status = $request->query('status');
+        $search = $request->query('search');
         $query = \App\Models\Course::with(['formateur.user', 'category']);
 
         if ($status && in_array($status, ['pending', 'approved', 'rejected'])) {
             $query->where('status', $status);
         }
 
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('formateur.user', function($q2) use ($search) {
+                      $q2->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+
         $courses = $query->latest()->paginate(15)->withQueryString();
 
-        return view('admin.courses.index', compact('courses', 'status'));
+        return view('admin.courses.index', compact('courses', 'status', 'search'));
     }
 
     public function show(\App\Models\Course $course)

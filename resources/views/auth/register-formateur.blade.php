@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('title', 'Devenir Formateur - OPTI-LEARNING')
 
@@ -14,9 +14,9 @@
                             <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Devenir Formateur</h1>
                             <p class="text-orange-100">Partagez votre expertise et gagnez de l'argent</p>
                         </div>
-                        <div class="bg-white/20 p-2 rounded-lg w-12 h-12 flex items-center justify-center">
-                            <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain">
-                        </div>
+                        <a href="{{ url('/') }}" class="bg-white p-2 rounded w-16 h-12 flex items-center justify-center hover:scale-105 transition-transform duration-300">
+                            <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="w-full h-full object-contain">
+                        </a>
                     </div>
                 </div>
 

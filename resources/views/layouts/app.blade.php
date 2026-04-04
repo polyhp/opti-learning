@@ -94,21 +94,8 @@
                                 class="absolute -inset-4 bg-gradient-to-r from-[#FF6B35] to-[#FF8E5E] opacity-0 group-hover:opacity-20 blur-xl transition-all duration-500 rounded-full">
                             </div>
 
-                            <!-- Icône avec animation flottante -->
-                            <div class="w-11 h-11 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 animate-float">
-                                <img src="{{ asset('images/logo-icon.svg') }}" alt="Logo" class="w-full h-full object-contain drop-shadow-md">
-                            </div>
-
-                            <!-- Texte avec gradient -->
-                            <div class="relative overflow-hidden">
-                                <span
-                                    class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-[#0A2647] via-[#1E3A5F] to-[#FF6B35] bg-clip-text text-transparent">
-                                    OPTI-LEARNING
-                                </span>
-                                <!-- Effet de brillance au survol -->
-                                <div
-                                    class="absolute inset-0 shimmer-effect opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                </div>
+                            <div class="h-16 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 animate-float">
+                                <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="h-full w-auto object-contain drop-shadow-md rounded">
                             </div>
                         </a>
                     </div>

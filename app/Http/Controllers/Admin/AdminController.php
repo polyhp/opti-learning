@@ -9,15 +9,20 @@ class AdminController extends Controller
 {
     public function create()
     {
+        abort_if(!auth()->user()->is_super_admin, 403, 'Accès non autorisé.');
         return view('admin.create');
     }
 
     public function store(Request $request)
     {
+        abort_if(!auth()->user()->is_super_admin, 403, 'Accès non autorisé.');
+
         $validated = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'permissions' => 'nullable|array',
+            'is_super_admin' => 'nullable|boolean',
         ]);
 
         $user = \App\Models\User::create([
@@ -27,7 +32,14 @@ class AdminController extends Controller
             'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16)),
             'role' => 'admin',
             'is_active' => false,
+            'is_super_admin' => $request->boolean('is_super_admin'),
         ]);
+
+        $user->assignRole('admin');
+        
+        if (!empty($validated['permissions'])) {
+            $user->syncPermissions($validated['permissions']);
+        }
 
         $url = \Illuminate\Support\Facades\URL::temporarySignedRoute(
             'admin.setup', now()->addHours(48), ['user' => $user->id]
@@ -76,6 +88,8 @@ class AdminController extends Controller
     }
     public function logs(Request $request)
     {
+        abort_if(!auth()->user()->is_super_admin, 403, 'Accès non autorisé.');
+
         $query = \App\Models\AdminActivityLog::with('user')->latest();
         
         if ($request->filled('date')) {

@@ -24,12 +24,15 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
 
-        // Récentes commandes
-        $recentOrders = \App\Models\Order::with(['user', 'course'])
-            ->latest()
+        // Formations les plus achetées
+        $topCourses = \App\Models\Course::with(['formateur.user'])
+            ->withCount(['orders' => function ($query) {
+                $query->where('status', 'completed');
+            }])
+            ->orderByDesc('orders_count')
             ->take(5)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'pendingCourses', 'recentOrders'));
+        return view('admin.dashboard', compact('stats', 'pendingCourses', 'topCourses'));
     }
 }

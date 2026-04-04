@@ -78,10 +78,19 @@ class DashboardController extends Controller
             ->withCount('lessons');
 
         if ($search) {
-            $coursesQuery->where('title', 'like', "%{$search}%");
+            $coursesQuery->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhereHas('formateur.user', function($q2) use ($search) {
+                      $q2->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('category', function($q3) use ($search) {
+                      $q3->where('name', 'like', "%{$search}%");
+                  });
+            });
         }
 
-        $courses = $coursesQuery->orderBy('created_at', 'desc')->paginate(12);
+        $courses = $coursesQuery->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
 
         return view('apprenant.catalog', compact('courses', 'search'));
     }

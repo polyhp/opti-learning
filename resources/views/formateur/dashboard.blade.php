@@ -3,354 +3,529 @@
 @section('title', 'Mon Espace - Formateur')
 
 @section('content')
-<div class="w-full flex flex-col space-y-8">
-    
-    <!-- Top Actions & Search -->
-    <div class="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-100 gap-4">
-        <!-- Search bar -->
-        <form action="{{ route('formateur.catalog') }}" method="GET" class="relative w-full md:w-1/3">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-search text-slate-400"></i>
-            </div>
-            <input type="text" name="search" class="block w-full pl-11 pr-4 py-3 bg-slate-50 border-0 rounded-xl text-sm placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all outline-none" placeholder="Rechercher dans le catalogue...">
-        </form>
+    <div class="w-full flex flex-col space-y-8">
 
-        <!-- Action Buttons -->
-        <div class="flex items-center space-x-3 w-full md:w-auto">
-            <button onclick="document.getElementById('profileModal').classList.remove('hidden')" class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-navy-50 text-navy-700 hover:bg-navy-100 px-5 py-3 rounded-xl font-medium transition-colors">
-                <i class="fas fa-user-cog"></i>
-                <span>Gestion Profil</span>
-            </button>
-            <a href="{{ route('formateur.courses.create') }}" class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-orange-500/30 transition-all transform hover:-translate-y-0.5">
-                <i class="fas fa-plus"></i>
-                <span>Ajouter Formation</span>
-            </a>
-        </div>
-    </div>
+        <!-- Top Actions & Search -->
+        <div
+            class="flex flex-col md:flex-row justify-between items-center bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-lg border-2 border-white/20 gap-4">
+            <!-- Search bar -->
+            <form action="{{ route('formateur.catalog') }}" method="GET" class="relative w-full md:w-1/3">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-slate-400"></i>
+                </div>
+                <input type="text" name="search"
+                    class="block w-full pl-11 pr-4 py-3 bg-white border-2 border-slate-300 rounded-xl text-sm placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none"
+                    placeholder="Rechercher dans le catalogue...">
+            </form>
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <!-- Stat 1 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
-            <div class="absolute -right-6 -top-6 w-24 h-24 bg-orange-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-in-out"></div>
-            <div class="relative z-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Revenus Totaux</h3>
-                    <div class="w-10 h-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center"><i class="fas fa-wallet"></i></div>
-                </div>
-                <div class="text-3xl font-head font-bold text-slate-800">{{ number_format($totalRevenue, 0, ',', ' ') }} <span class="text-lg text-slate-400 font-medium">FCFA</span></div>
-            </div>
-        </div>
-        
-        <!-- Stat 2 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
-            <div class="absolute -right-6 -top-6 w-24 h-24 bg-navy-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-in-out"></div>
-            <div class="relative z-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Ventes (Achats)</h3>
-                    <div class="w-10 h-10 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center"><i class="fas fa-shopping-cart"></i></div>
-                </div>
-                <div class="text-3xl font-head font-bold text-slate-800">{{ $totalSales }} <span class="text-lg text-slate-400 font-medium">ventes</span></div>
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-3 w-full md:w-auto">
+                <button onclick="openProfileModal()"
+                    class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-navy-50 text-navy-700 hover:bg-navy-100 border-2 border-navy-200 px-5 py-3 rounded-xl font-medium transition-colors">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Gestion Profil</span>
+                </button>
+                <a href="{{ route('formateur.courses.create') }}"
+                    class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-orange-500/30 transition-all transform hover:-translate-y-0.5">
+                    <i class="fas fa-plus"></i>
+                    <span>Ajouter Formation</span>
+                </a>
             </div>
         </div>
 
-        <!-- Stat 3 -->
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
-            <div class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 rounded-full group-hover:scale-150 transition-transform duration-500 ease-in-out"></div>
-            <div class="relative z-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Formations Publiées</h3>
-                    <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center"><i class="fas fa-book-open"></i></div>
-                </div>
-                <div class="text-3xl font-head font-bold text-slate-800">{{ $totalCourses }}</div>
+        <!-- Header Mobile avec Hamburger -->
+        <div class="md:hidden bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-white/20 p-4">
+            <div class="flex items-center justify-between">
+                <button id="mobileMenuBtn" class="text-navy-900 hover:text-orange-500 transition-colors p-2 -ml-2">
+                    <i id="menuIcon" class="fas fa-bars text-2xl"></i>
+                </button>
+                <h2 class="font-head font-bold text-navy-900">Tableau de Bord</h2>
+                <div class="w-10"></div>
             </div>
-        </div>
-        
-        <!-- Stat 4 -->
-        <div class="bg-gradient-to-br from-navy-900 to-navy-800 p-6 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-center">
-            <div class="absolute right-0 bottom-0 opacity-10 text-white text-8xl transform translate-x-4 translate-y-4">
-                <i class="fas fa-chart-line"></i>
-            </div>
-            <div class="relative z-10 text-center">
-                <h3 class="text-navy-300 font-medium text-sm mb-2">Fréquence des ventes</h3>
-                <div class="text-3xl font-head font-bold text-white mb-1">+{{ rand(5, 25) }}%</div>
-                <p class="text-xs text-orange-400">Cette semaine</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Main Panel: Apprenants & Rapports -->
-        <div class="lg:col-span-2 space-y-8">
-            <!-- Apprenants inscrits -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h2 class="font-head text-lg font-bold text-navy-900"><i class="fas fa-users mr-2 text-navy-500"></i>Apprenants Inscrits (Ventes Récentes)</h2>
-                    <button class="text-sm text-orange-500 font-medium hover:text-orange-600">Voir tout</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-white text-slate-400 text-xs uppercase tracking-wider border-b border-slate-100">
-                                <th class="px-6 py-4 font-medium">Apprenant</th>
-                                <th class="px-6 py-4 font-medium">Formation (Achetée)</th>
-                                <th class="px-6 py-4 font-medium">Montant</th>
-                                <th class="px-6 py-4 font-medium">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 text-sm">
-                            @forelse($orders as $order)
-                            <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-xs">
-                                            {{ substr($order->user->first_name, 0, 1) }}
-                                        </div>
-                                        <div>
-                                            <div class="font-medium text-slate-800">{{ $order->user->first_name }} {{ $order->user->last_name }}</div>
-                                            <div class="text-xs text-slate-400">{{ $order->user->email }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-slate-800 font-medium truncate max-w-[150px]">{{ $order->course->title }}</div>
-                                </td>
-                                <td class="px-6 py-4 text-emerald-600 font-semibold">{{ number_format($order->amount, 0, ',', ' ') }} FCFA</td>
-                                <td class="px-6 py-4 text-slate-500">{{ $order->created_at->format('d/m/Y') }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="4" class="px-6 py-10 text-center text-slate-400">
-                                    <i class="fas fa-box-open text-4xl mb-3 text-slate-200"></i>
-                                    <p>Aucune vente pour le moment.</p>
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            
-            <!-- Rapport de vente -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50">
-                    <h2 class="font-head text-lg font-bold text-navy-900"><i class="fas fa-chart-area mr-2 text-navy-500"></i>Rapport de Vente</h2>
-                </div>
-                <div class="p-6 h-64 flex items-center justify-center flex-col text-slate-400">
-                    <i class="fas fa-chart-bar text-6xl mb-4 text-slate-200"></i>
-                    <p>Interface de graphique analytique à connecter.</p>
-                </div>
-            </div>
-        </div>
+            <div id="mobileMenuPanel" class="hidden mt-4 space-y-3 border-t-2 border-slate-200 pt-4">
+                <form action="{{ route('formateur.catalog') }}" method="GET" class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-slate-400 text-sm"></i>
+                    </div>
+                    <input type="text" name="search"
+                        class="block w-full pl-10 pr-4 py-2.5 bg-white border-2 border-slate-300 rounded-xl text-sm placeholder-slate-400 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all outline-none"
+                        placeholder="Rechercher...">
+                </form>
 
-        <!-- Right Panel: Mes Formations -->
-        <div class="space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                <div class="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                    <h2 class="font-head text-lg font-bold text-navy-900"><i class="fas fa-film mr-2 text-navy-500"></i>Formations Récentes</h2>
-                </div>
-                <div class="p-4 space-y-4">
-                    @forelse($recentCourses as $course)
-                    <div class="flex space-x-4 p-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-100 transition-all group">
-                        <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200 relative">
-                            @if($course->thumbnail)
-                                <img src="{{ asset($course->thumbnail) }}" class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center bg-navy-100 text-navy-400"><i class="fas fa-video"></i></div>
-                            @endif
-                            @if($course->status == 'approved')
-                                <div class="absolute top-1 right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" title="Approuvée"></div>
-                            @elseif($course->status == 'pending')
-                                <div class="absolute top-1 right-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-white" title="En attente"></div>
-                            @endif
+                <button onclick="openProfileModal()"
+                    class="w-full flex items-center justify-center space-x-2 bg-navy-50 text-navy-700 hover:bg-navy-100 px-4 py-2.5 rounded-xl font-medium transition-colors border-2 border-navy-200">
+                    <i class="fas fa-user-cog"></i>
+                    <span>Gestion Profil</span>
+                </button>
+                <a href="{{ route('formateur.courses.create') }}"
+                    class="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2.5 rounded-xl font-medium shadow-md transition-all">
+                    <i class="fas fa-plus"></i>
+                    <span>Ajouter Formation</span>
+                </a>
+
+                <div class="border-t-2 border-slate-200 pt-3 mt-2">
+                    <div class="flex items-center space-x-3 mb-3 px-2">
+                        <div
+                            class="w-10 h-10 rounded-full bg-navy-100 flex items-center justify-center text-navy-700 font-bold border-2 border-navy-200">
+                            {{ substr(Auth::user()->first_name, 0, 1) }}{{ substr(Auth::user()->last_name, 0, 1) }}
                         </div>
-                        <div class="flex-grow flex flex-col justify-between">
-                            <div>
-                                <h3 class="text-sm font-bold text-navy-900 line-clamp-2 leading-tight group-hover:text-orange-500 transition-colors">{{ $course->title }}</h3>
-                                <p class="text-xs text-slate-400 mt-1">{{ number_format($course->price, 0, ',', ' ') }} FCFA • {{ $course->lessons_count }} leçon(s)</p>
-                            </div>
-                            <a href="{{ route('formateur.courses.show', $course->id) }}" class="text-xs font-semibold text-navy-500 hover:text-navy-700 mt-2 inline-flex items-center">
-                                Visionner <i class="fas fa-chevron-right ml-1 text-[10px]"></i>
-                            </a>
+                        <div>
+                            <p class="text-sm font-semibold text-navy-900">{{ Auth::user()->first_name }}
+                                {{ Auth::user()->last_name }}</p>
+                            <p class="text-xs text-slate-500">Formateur</p>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center py-8 text-slate-400">
-                        <p class="text-sm mb-4">Vous n'avez pas encore créé de formation.</p>
-                        <a href="{{ route('formateur.courses.create') }}" class="text-sm bg-orange-100 text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-orange-200">Créer ma première formation</a>
-                    </div>
-                    @endforelse
-                    
-                    @if(count($recentCourses) > 0)
-                    <a href="{{ route('formateur.courses.index') }}" class="block text-center w-full mt-2 py-3 bg-slate-50 text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-semibold transition-colors">
-                        Voir toutes mes formations
-                    </a>
-                    @endif
+
+                    <button onclick="confirmLogout()"
+                        class="w-full flex items-center justify-center space-x-2 bg-red-50 text-red-600 hover:bg-red-100 px-4 py-2.5 rounded-xl font-medium transition-colors border-2 border-red-200">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Déconnexion</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
-    
-    <!-- Section Espace Apprentissage -->
-    <div class="mt-12 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        <div class="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-            <h2 class="font-head text-lg font-bold text-navy-900"><i class="fas fa-graduation-cap mr-2 text-orange-500"></i>Mon Espace Apprentissage (En tant qu'apprenant)</h2>
-        </div>
-        <div class="p-6">
-            @if($myEnrolledCourses->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    @foreach($myEnrolledCourses as $course)
-                    <div class="bg-white border text-left border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-orange-200 transition-all duration-300 group flex flex-col h-full relative">
-                        <!-- Image Container -->
-                        <div class="h-40 overflow-hidden relative bg-slate-100">
-                            @if($course->thumbnail)
-                                <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center bg-navy-50 text-navy-200">
-                                    <i class="fas fa-laptop-code text-4xl"></i>
-                                </div>
-                            @endif
-                            <!-- Overlay Date -->
-                            <div class="absolute top-2 right-2 bg-white/90 backdrop-blur text-navy-800 text-xs font-bold px-2 py-1 rounded-lg">
-                                Inscrit le {{ $course->order_date->format('d/m/Y') }}
-                            </div>
-                        </div>
 
-                        <!-- Content Container -->
-                        <div class="p-5 flex-grow flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-head font-bold text-lg text-navy-900 mb-1 line-clamp-2 leading-tight group-hover:text-orange-500 transition-colors">{{ $course->title }}</h3>
-                                <p class="text-sm text-slate-500 mb-4 flex items-center">
-                                    <i class="fas fa-chalkboard-teacher mr-2 text-slate-400"></i>
-                                    {{ $course->formateur->user->first_name }} {{ $course->formateur->user->last_name }}
-                                </p>
-                            </div>
-                            
-                            <!-- Progression & Stats -->
-                            <div class="space-y-4">
-                                <!-- Progress Bar -->
-                                <div>
-                                    <div class="flex justify-between items-center text-xs mb-1">
-                                        <span class="font-medium text-slate-600">Progrès des leçons</span>
-                                        <span class="font-bold {{ $course->custom_progress == 100 ? 'text-emerald-500' : 'text-orange-500' }}">{{ $course->custom_progress }}%</span>
-                                    </div>
-                                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                                        <div class="h-full {{ $course->custom_progress == 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-orange-400 to-orange-500' }} rounded-full" style="width: {{ $course->custom_progress }}%"></div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Quiz Note -->
-                                <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100">
-                                    <div class="flex items-center space-x-2">
-                                        <i class="fas fa-clipboard-check {{ $course->custom_passed ? 'text-emerald-500' : 'text-slate-400' }}"></i>
-                                        <span class="text-xs font-semibold text-slate-600">Note Finale</span>
-                                    </div>
-                                    @if(!is_null($course->custom_score))
-                                        <span class="font-head font-bold text-sm {{ $course->custom_passed ? 'text-emerald-600' : 'text-red-500' }}">{{ $course->custom_score }}/20</span>
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div
+                class="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border-2 border-white/20 shadow-lg relative overflow-hidden group">
+                <div
+                    class="absolute -right-6 -top-6 w-24 h-24 bg-orange-50 rounded-full group-hover:scale-150 transition-transform duration-500">
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Revenus Totaux</h3>
+                        <div
+                            class="w-10 h-10 bg-orange-100 text-orange-600 rounded-lg flex items-center justify-center border-2 border-orange-200">
+                            <i class="fas fa-wallet"></i></div>
+                    </div>
+                    <div class="text-3xl font-head font-bold text-slate-800">{{ number_format($totalRevenue, 0, ',', ' ') }}
+                        <span class="text-lg text-slate-400 font-medium">FCFA</span></div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border-2 border-white/20 shadow-lg relative overflow-hidden group">
+                <div
+                    class="absolute -right-6 -top-6 w-24 h-24 bg-navy-50 rounded-full group-hover:scale-150 transition-transform duration-500">
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Ventes (Achats)</h3>
+                        <div
+                            class="w-10 h-10 bg-navy-100 text-navy-700 rounded-lg flex items-center justify-center border-2 border-navy-200">
+                            <i class="fas fa-shopping-cart"></i></div>
+                    </div>
+                    <div class="text-3xl font-head font-bold text-slate-800">{{ $totalSales }} <span
+                            class="text-lg text-slate-400 font-medium">ventes</span></div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white/95 backdrop-blur-sm p-6 rounded-2xl border-2 border-white/20 shadow-lg relative overflow-hidden group">
+                <div
+                    class="absolute -right-6 -top-6 w-24 h-24 bg-emerald-50 rounded-full group-hover:scale-150 transition-transform duration-500">
+                </div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-slate-500 font-medium text-sm uppercase tracking-wider">Formations Publiées</h3>
+                        <div
+                            class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center border-2 border-emerald-200">
+                            <i class="fas fa-book-open"></i></div>
+                    </div>
+                    <div class="text-3xl font-head font-bold text-slate-800">{{ $totalCourses }}</div>
+                </div>
+            </div>
+
+            <div
+                class="bg-gradient-to-br from-navy-900 to-navy-800 p-6 rounded-2xl shadow-lg relative overflow-hidden flex flex-col justify-center border-2 border-navy-700">
+                <div class="absolute right-0 bottom-0 opacity-10 text-white text-8xl transform translate-x-4 translate-y-4">
+                    <i class="fas fa-chart-line"></i></div>
+                <div class="relative z-10 text-center">
+                    <h3 class="text-navy-300 font-medium text-sm mb-2">Fréquence des ventes</h3>
+                    <div class="text-3xl font-bold text-orange-400 mb-1">+{{ rand(5, 25) }}%</div>
+                    <p class="text-xs text-orange-400">Cette semaine</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Panel -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Apprenants inscrits -->
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-white/20 overflow-hidden">
+                    <div class="px-6 py-5 border-b-2 border-slate-200 flex justify-between items-center bg-slate-50/50">
+                        <h2 class="font-head text-lg font-bold text-navy-900"><i
+                                class="fas fa-users mr-2 text-navy-500"></i>Apprenants Inscrits</h2>
+                        <button class="text-sm text-orange-500 font-medium hover:text-orange-600">Voir tout</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-white text-blue text-xs uppercase tracking-wider border-b-2 border-slate-200">
+                                    <th class="px-6 py-4 font-medium">Apprenant</th>
+                                    <th class="px-6 py-4 font-medium">Formation</th>
+                                    <th class="px-6 py-4 font-medium">Montant</th>
+                                    <th class="px-6 py-4 font-medium">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-sm">
+                                @forelse($orders as $order)
+                                    <tr class="hover:bg-slate-50/50 transition-colors">
+                                        <td class="px-6 py-4">
+                                            <div class="flex items-center space-x-3">
+                                                <div
+                                                    class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-500 text-xs border-2 border-slate-300">
+                                                    {{ substr($order->user->first_name, 0, 1) }}
+                                                </div>
+                                                <div>
+                                                    <div class="font-medium text-slate-800">{{ $order->user->first_name }}
+                                                        {{ $order->user->last_name }}</div>
+                                                    <div class="text-xs text-slate-400">{{ $order->user->email }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-slate-800 font-medium truncate max-w-[150px]">
+                                                {{ $order->course->title }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 text-emerald-600 font-semibold">
+                                            {{ number_format($order->amount, 0, ',', ' ') }} FCFA</td>
+                                        <td class="px-6 py-4 text-slate-500">{{ $order->created_at->format('d/m/Y') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-10 text-center text-slate-400">
+                                            <i class="fas fa-box-open text-4xl mb-3 text-slate-200"></i>
+                                            <p>Aucune vente pour le moment.</p>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Rapport de vente -->
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-white/20 overflow-hidden">
+                    <div class="px-6 py-5 border-b-2 border-slate-200 bg-slate-50/50">
+                        <h2 class="font-head text-lg font-bold text-navy-900"><i
+                                class="fas fa-chart-area mr-2 text-navy-500"></i>Rapport de Vente</h2>
+                    </div>
+                    <div class="p-6 h-64 flex items-center justify-center flex-col text-slate-400">
+                        <i class="fas fa-chart-bar text-6xl mb-4 text-slate-200"></i>
+                        <p>Interface de graphique analytique à connecter.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Mes Formations -->
+            <div class="space-y-6">
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-white/20 overflow-hidden">
+                    <div class="px-6 py-5 border-b-2 border-slate-200 flex justify-between items-center bg-slate-50/50">
+                        <h2 class="font-head text-lg font-bold text-navy-900"><i
+                                class="fas fa-film mr-2 text-navy-500"></i>Formations Récentes</h2>
+                    </div>
+                    <div class="p-4 space-y-4">
+                        @forelse($recentCourses as $course)
+                            <div
+                                class="flex space-x-4 p-3 rounded-xl hover:bg-slate-50 border-2 border-transparent hover:border-slate-200 transition-all group">
+                                <div
+                                    class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-slate-200 relative border-2 border-slate-300">
+                                    @if($course->thumbnail)
+                                        <img src="{{ asset($course->thumbnail) }}" class="w-full h-full object-cover">
                                     @else
-                                        <span class="text-xs text-orange-500 font-medium">À passer</span>
+                                        <div class="w-full h-full flex items-center justify-center bg-navy-100 text-navy-400"><i
+                                                class="fas fa-video"></i></div>
+                                    @endif
+                                    @if($course->status == 'approved')
+                                        <div class="absolute top-1 right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"
+                                            title="Approuvée"></div>
+                                    @elseif($course->status == 'pending')
+                                        <div class="absolute top-1 right-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-white"
+                                            title="En attente"></div>
                                     @endif
                                 </div>
+                                <div class="flex-grow flex flex-col justify-between">
+                                    <div>
+                                        <h3
+                                            class="text-sm font-bold text-navy-900 line-clamp-2 leading-tight group-hover:text-orange-500 transition-colors">
+                                            {{ $course->title }}</h3>
+                                        <p class="text-xs text-slate-400 mt-1">{{ number_format($course->price, 0, ',', ' ') }}
+                                            FCFA • {{ $course->lessons_count }} leçon(s)</p>
+                                    </div>
+                                    <a href="{{ route('formateur.courses.show', $course->id) }}"
+                                        class="text-xs font-semibold text-navy-500 hover:text-navy-700 mt-2 inline-flex items-center">Visionner
+                                        <i class="fas fa-chevron-right ml-1 text-[10px]"></i></a>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-8 text-slate-400">
+                                <p class="text-sm mb-4">Vous n'avez pas encore créé de formation.</p>
+                                <a href="{{ route('formateur.courses.create') }}"
+                                    class="text-sm bg-orange-100 text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-orange-200">Créer
+                                    ma première formation</a>
+                            </div>
+                        @endforelse
+                        @if(count($recentCourses) > 0)
+                            <a href="{{ route('formateur.courses.index') }}"
+                                class="block text-center w-full mt-2 py-3 bg-slate-50 text-slate-600 hover:bg-slate-100 rounded-xl text-sm font-semibold transition-colors border-2 border-slate-200">Voir
+                                toutes mes formations</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Espace Apprentissage -->
+        <div class="mt-12 bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-white/20 overflow-hidden">
+            <div class="px-6 py-5 border-b-2 border-slate-200 bg-slate-50/50 flex justify-between items-center">
+                <h2 class="font-head text-lg font-bold text-navy-900"><i
+                        class="fas fa-graduation-cap mr-2 text-orange-500"></i>Mon Espace Apprentissage</h2>
+            </div>
+            <div class="p-6">
+                @if($myEnrolledCourses->count() > 0)
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @foreach($myEnrolledCourses as $course)
+                            <div
+                                class="bg-white border-2 border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl hover:border-orange-300 transition-all duration-300 group flex flex-col h-full relative">
+                                <div class="h-40 overflow-hidden relative bg-slate-100 border-b-2 border-slate-200">
+                                    @if($course->thumbnail)
+                                        <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
+                                            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                    @else
+                                        <div class="w-full h-full flex items-center justify-center bg-navy-50 text-navy-200"><i
+                                                class="fas fa-laptop-code text-4xl"></i></div>
+                                    @endif
+                                    <div
+                                        class="absolute top-2 right-2 bg-white/90 backdrop-blur text-navy-800 text-xs font-bold px-2 py-1 rounded-lg border-2 border-slate-200">
+                                        Inscrit le {{ $course->order_date->format('d/m/Y') }}</div>
+                                </div>
+                                <div class="p-5 flex-grow flex flex-col justify-between">
+                                    <div>
+                                        <h3
+                                            class="font-head font-bold text-lg text-navy-900 mb-1 line-clamp-2 leading-tight group-hover:text-orange-500 transition-colors">
+                                            {{ $course->title }}</h3>
+                                        <p class="text-sm text-slate-500 mb-4 flex items-center"><i
+                                                class="fas fa-chalkboard-teacher mr-2 text-slate-400"></i>{{ $course->formateur->user->first_name }}
+                                            {{ $course->formateur->user->last_name }}</p>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div>
+                                            <div class="flex justify-between items-center text-xs mb-1">
+                                                <span class="font-medium text-slate-600">Progrès des leçons</span>
+                                                <span
+                                                    class="font-bold {{ $course->custom_progress == 100 ? 'text-emerald-500' : 'text-orange-500' }}">{{ $course->custom_progress }}%</span>
+                                            </div>
+                                            <div
+                                                class="w-full bg-slate-100 rounded-full h-2 overflow-hidden border-2 border-slate-200">
+                                                <div class="h-full {{ $course->custom_progress == 100 ? 'bg-emerald-500' : 'bg-gradient-to-r from-orange-400 to-orange-500' }} rounded-full"
+                                                    style="width: {{ $course->custom_progress }}%"></div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border-2 border-slate-200">
+                                            <div class="flex items-center space-x-2"><i
+                                                    class="fas fa-clipboard-check {{ $course->custom_passed ? 'text-emerald-500' : 'text-slate-400' }}"></i><span
+                                                    class="text-xs font-semibold text-slate-600">Note Finale</span></div>
+                                            @if(!is_null($course->custom_score))<span
+                                            class="font-head font-bold text-sm {{ $course->custom_passed ? 'text-emerald-600' : 'text-red-500' }}">{{ $course->custom_score }}/20</span>@else<span
+                                                class="text-xs text-orange-500 font-medium">À passer</span>@endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 border-t-2 border-slate-200 bg-slate-50/50 flex justify-between items-center gap-2">
+                                    <a href="{{ route('apprenant.courses.watch', $course->id) }}"
+                                        class="flex-grow text-center bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">{{ $course->custom_progress == 100 ? 'Réviser' : 'Continuer' }}</a>
+                                    @if($course->can_download_certificate)<a
+                                        href="{{ route('apprenant.certificate.download', $course->id) }}"
+                                        class="flex-none bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 p-2.5 rounded-xl transition-colors border-2 border-emerald-200"
+                                    title="Télécharger le certificat"><i class="fas fa-award text-lg"></i></a>@else<button
+                                            disabled
+                                            class="flex-none bg-slate-100 text-slate-300 p-2.5 rounded-xl cursor-not-allowed border-2 border-slate-200"
+                                        title="Certificat non débloqué"><i class="fas fa-lock text-lg"></i></button>@endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="flex flex-col items-center justify-center py-12 text-center">
+                        <div
+                            class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 text-4xl mb-4 border-2 border-slate-200">
+                            <i class="fas fa-folder-open"></i></div>
+                        <h3 class="text-lg font-bold text-navy-900 mb-2">Aucune formation en cours</h3>
+                        <p class="text-slate-500 max-w-md mx-auto mb-6">Explorez notre catalogue pour commencer votre
+                            apprentissage !</p>
+                        <a href="{{ route('formateur.catalog') }}"
+                            class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-medium transition-colors">Découvrir
+                            les formations</a>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Profile -->
+    <div id="profileModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-navy-900/80 backdrop-blur-md" onclick="closeProfileModal()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto border-2 border-slate-200">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-head font-bold text-navy-900">Gestion du Profil</h2>
+                <button onclick="closeProfileModal()"
+                    class="w-8 h-8 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center hover:bg-slate-200 border-2 border-slate-300"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <form action="{{ route('formateur.profile.update') }}" method="POST" enctype="multipart/form-data"
+                class="space-y-6">
+                @csrf
+                <div class="grid grid-cols-2 gap-6">
+                    <div><label class="block text-sm font-medium text-slate-700 mb-1">Prénom</label><input type="text"
+                            name="first_name" value="{{ Auth::user()->first_name }}" required
+                            class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
+                    </div>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-1">Nom</label><input type="text"
+                            name="last_name" value="{{ Auth::user()->last_name }}" required
+                            class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
+                    </div>
+                </div>
+                <hr class="border-slate-200">
+                <div>
+                    <h3 class="text-lg font-bold text-navy-900 mb-4">Sécurité</h3>
+                    <div class="space-y-4">
+                        <div><label class="block text-sm font-medium text-slate-700 mb-1">Mot de passe actuel</label><input
+                                type="password" name="current_password"
+                                class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
+                        </div>
+                        <div class="grid grid-cols-2 gap-6">
+                            <div><label class="block text-sm font-medium text-slate-700 mb-1">Nouveau mot de
+                                    passe</label><input type="password" name="new_password"
+                                    class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
+                            </div>
+                            <div><label class="block text-sm font-medium text-slate-700 mb-1">Confirmer</label><input
+                                    type="password" name="new_password_confirmation"
+                                    class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
                             </div>
                         </div>
-
-                        <!-- Action Footer -->
-                        <div class="p-4 border-t border-slate-50 bg-slate-50/50 flex justify-between items-center gap-2">
-                            <a href="{{ route('apprenant.courses.watch', $course->id) }}" class="flex-grow text-center bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">
-                                {{ $course->custom_progress == 100 ? 'Réviser' : 'Continuer' }}
-                            </a>
-                            
-                            @if($course->can_download_certificate)
-                            <a href="{{ route('apprenant.certificate.download', $course->id) }}" class="flex-none bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 p-2.5 rounded-xl transition-colors" title="Télécharger le certificat PDF">
-                                <i class="fas fa-award text-lg"></i>
-                            </a>
-                            @else
-                                <button disabled class="flex-none bg-slate-100 text-slate-300 p-2.5 rounded-xl cursor-not-allowed" title="Le certificat n'est pas encore débloqué">
-                                    <i class="fas fa-lock text-lg"></i>
-                                </button>
-                            @endif
-                        </div>
                     </div>
-                    @endforeach
                 </div>
-            @else
-                <div class="flex flex-col items-center justify-center py-12 text-center">
-                    <div class="w-24 h-24 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 text-4xl mb-4">
-                        <i class="fas fa-folder-open"></i>
+                <hr class="border-slate-200">
+                <div>
+                    <h3 class="text-lg font-bold text-navy-900 mb-4">Documents (Optionnel)</h3>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-1">Rajouter un
+                            dossier/diplôme</label><input type="file" name="diploma_file"
+                            class="w-full px-4 py-2 bg-white border-2 border-slate-300 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100 text-sm text-slate-500 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all">
                     </div>
-                    <h3 class="text-lg font-bold text-navy-900 mb-2">Aucune formation en cours</h3>
-                    <p class="text-slate-500 max-w-md mx-auto mb-6">Vous ne participez à aucune formation pour le moment. Explorez notre catalogue pour commencer votre apprentissage !</p>
-                    <a href="{{ route('formateur.catalog') }}" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-medium transition-colors">
-                        Découvrir les formations
-                    </a>
                 </div>
-            @endif
+                <div class="flex justify-end pt-4"><button type="submit"
+                        class="bg-navy-900 hover:bg-navy-800 text-white px-8 py-3 rounded-xl font-medium shadow-lg shadow-navy-900/20 transition-all border-2 border-navy-700">Enregistrer</button>
+                </div>
+            </form>
         </div>
     </div>
-    
-</div>
 
-<!-- Modal Profile (Tailwind) -->
-<div id="profileModal" class="fixed inset-0 z-[100] hidden">
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-navy-900/60 backdrop-blur-sm" onclick="document.getElementById('profileModal').classList.add('hidden')"></div>
-    
-    <!-- Modal Panel -->
-    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-white rounded-3xl shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-head font-bold text-navy-900">Gestion du Profil</h2>
-            <button onclick="document.getElementById('profileModal').classList.add('hidden')" class="w-8 h-8 bg-slate-100 text-slate-500 rounded-full flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times"></i></button>
+    <!-- Modal de confirmation de déconnexion -->
+    <div id="logoutConfirmModal" class="fixed inset-0 z-[200] hidden">
+        <div class="absolute inset-0 bg-navy-900/90 backdrop-blur-md" onclick="closeLogoutModal()"></div>
+        <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+            <div class="bg-gradient-to-r from-red-500 to-red-600 p-6 text-center">
+                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3"><i
+                        class="fas fa-sign-out-alt text-white text-4xl"></i></div>
+                <h3 class="text-white text-xl font-head font-bold">Déconnexion</h3>
+                <p class="text-white/80 text-sm mt-1">Êtes-vous sûr de vouloir quitter ?</p>
+            </div>
+            <div class="p-6 text-center">
+                <p class="text-slate-600 text-sm mb-6">Vous allez être déconnecté de votre session.</p>
+                <div class="flex gap-3">
+                    <button onclick="closeLogoutModal()"
+                        class="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium rounded-xl transition-colors border-2 border-slate-200">Annuler</button>
+                    <form method="POST" action="{{ route('logout') }}" class="flex-1">@csrf<button type="submit"
+                            class="w-full px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium rounded-xl transition-all shadow-lg shadow-red-500/30">Oui,
+                            me déconnecter</button></form>
+                </div>
+            </div>
         </div>
-        
-        <form action="{{ route('formateur.profile.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-            @csrf
-            <div class="grid grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Prénom</label>
-                    <input type="text" name="first_name" value="{{ Auth::user()->first_name }}" required class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Nom</label>
-                    <input type="text" name="last_name" value="{{ Auth::user()->last_name }}" required class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-                </div>
-            </div>
-            
-            <hr class="border-slate-100">
-            
-            <div>
-                <h3 class="text-lg font-bold text-navy-900 mb-4">Sécurité</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Mot de passe actuel (si modification)</label>
-                        <input type="password" name="current_password" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-                    </div>
-                    <div class="grid grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Nouveau mot de passe</label>
-                            <input type="password" name="new_password" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Confirmer mot de passe</label>
-                            <input type="password" name="new_password_confirmation" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <hr class="border-slate-100">
-            
-            <div>
-                <h3 class="text-lg font-bold text-navy-900 mb-4">Documents (Optionnel)</h3>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">Rajouter un dossier/diplôme</label>
-                    <input type="file" name="diploma_file" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100 text-sm text-slate-500">
-                </div>
-            </div>
-            
-            <div class="flex justify-end pt-4">
-                <button type="submit" class="bg-navy-900 hover:bg-navy-800 text-white px-8 py-3 rounded-xl font-medium shadow-lg shadow-navy-900/20 transition-all">Enregistrer les modifications</button>
-            </div>
-        </form>
     </div>
-</div>
+
+    <style>
+        /* Fond global bleu nuit */
+        body {
+            background: linear-gradient(135deg, #0B1A3E 0%, #0d1f4a 50%, #0B1A3E 100%);
+            background-attachment: fixed;
+        }
+
+        /* Style pour les cartes avec effet glassmorphism */
+        .bg-white\/95 {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -40%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+
+        #mobileMenuPanel {
+            transition: all 0.3s ease;
+        }
+
+        /* Amélioration du contraste sur fond bleu */
+        .text-navy-900,
+        .font-head,
+        .text-slate-800,
+        .text-slate-700 {
+            color: #1a2a5a;
+        }
+    </style>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuPanel = document.getElementById('mobileMenuPanel');
+        const menuIcon = document.getElementById('menuIcon');
+
+        if (mobileMenuBtn && mobileMenuPanel) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenuPanel.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenuPanel.classList.remove('hidden');
+                    menuIcon.classList.remove('fa-bars');
+                    menuIcon.classList.add('fa-times');
+                } else {
+                    mobileMenuPanel.classList.add('hidden');
+                    menuIcon.classList.remove('fa-times');
+                    menuIcon.classList.add('fa-bars');
+                }
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768 && mobileMenuPanel && !mobileMenuPanel.classList.contains('hidden')) {
+                mobileMenuPanel.classList.add('hidden');
+                if (menuIcon) { menuIcon.classList.remove('fa-times'); menuIcon.classList.add('fa-bars'); }
+            }
+        });
+
+        function openProfileModal() { document.getElementById('profileModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeProfileModal() { document.getElementById('profileModal').classList.add('hidden'); document.body.style.overflow = ''; }
+        function confirmLogout() { document.getElementById('logoutConfirmModal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+        function closeLogoutModal() { document.getElementById('logoutConfirmModal').classList.add('hidden'); document.body.style.overflow = ''; }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeLogoutModal(); closeProfileModal(); }
+        });
+    </script>
 @endsection

@@ -66,30 +66,36 @@
     </div>
 </div>
 
-<!-- Recent Activity Section -->
+<!-- Top Courses Section -->
 <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8 max-w-4xl">
     <div class="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-[#0A2647]">Derniers Paiements</h3>
-        <a href="{{ route('admin.payments.index') }}" class="text-sm text-[#FF6B35] hover:text-[#FF8E5E] font-medium transition-colors">Voir tout →</a>
+        <h3 class="text-lg font-semibold text-[#0A2647]">Formations les plus achetées</h3>
+        <a href="{{ route('admin.courses.index', ['status' => 'approved']) }}" class="text-sm text-[#FF6B35] hover:text-[#FF8E5E] font-medium transition-colors">Voir toutes les formations →</a>
     </div>
     <div class="divide-y divide-gray-100">
-        @forelse($recentOrders as $order)
+        @forelse($topCourses as $course)
         <div class="px-6 py-4 flex items-center gap-4 hover:bg-gray-50 transition-colors">
-            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center overflow-hidden shrink-0">
-                <img src="{{ $order->user->avatar_url }}" alt="avatar" class="w-full h-full object-cover">
+            <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center overflow-hidden shrink-0">
+                @if($course->image)
+                    <img src="{{ asset('storage/' . $course->image) }}" alt="formation" class="w-full h-full object-cover">
+                @else
+                    <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                @endif
             </div>
             <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 truncate">{{ $order->user->full_name }} <span class="text-xs text-gray-500 ml-1">a acheté</span></p>
-                <p class="text-xs text-gray-500 mt-0.5 truncate">{{ $order->course->title ?? 'Formation' }}</p>
+                <p class="text-sm font-medium text-gray-900 truncate">{{ $course->title }}</p>
+                <p class="text-xs text-gray-500 mt-0.5 truncate">Par {{ $course->formateur->user->full_name ?? 'Inconnu' }}</p>
             </div>
             <div class="text-right">
-                <p class="text-sm font-bold text-[#0A2647]">{{ number_format($order->amount, 0, ',', ' ') }} F</p>
-                <span class="text-[10px] text-gray-400">Il y a {{ $order->created_at->diffForHumans() }}</span>
+                <p class="text-sm font-bold text-[#0A2647]">{{ $course->orders_count }} <span class="text-xs font-normal text-gray-500">achats</span></p>
+                <span class="text-[10px] text-[#FF6B35] font-medium">{{ number_format($course->price, 0, ',', ' ') }} F</span>
             </div>
         </div>
         @empty
         <div class="px-6 py-8 text-center text-gray-500">
-            <p class="text-sm font-medium">Aucun paiement récent enregistré.</p>
+            <p class="text-sm font-medium">Aucune donnée de vente disponible.</p>
         </div>
         @endforelse
     </div>
