@@ -27,10 +27,8 @@
         <div class="relative w-full max-w-6xl">
             <!-- Header avec animation -->
             <div class="text-center mb-12 animate-fade-in-up">
-                <div
-                    class="inline-flex items-center justify-center h-20 bg-white p-2 backdrop-blur-md rounded-2xl mb-6 shadow-xl transform rotate-3 hover:rotate-6 transition duration-300">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning"
-                        class="h-full w-auto object-contain drop-shadow-md">
+                <div class="inline-flex justify-center mb-6 transform rotate-3 hover:rotate-6 transition duration-300">
+                    <x-logo />
                 </div>
                 <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 text-shadow">
                     Bienvenue sur <span class="text-orange-500">OPTI-LEARNING</span>
@@ -194,11 +192,11 @@
             const loader = document.createElement('div');
             loader.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50';
             loader.innerHTML = `
-            <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center">
-                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
-                <p class="text-white text-lg">Redirection en cours...</p>
-            </div>
-        `;
+                <div class="bg-white/10 backdrop-blur-xl rounded-2xl p-8 text-center">
+                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mb-4"></div>
+                    <p class="text-white text-lg">Redirection en cours...</p>
+                </div>
+            `;
             document.body.appendChild(loader);
 
             // Redirection après un court délai pour l'animation

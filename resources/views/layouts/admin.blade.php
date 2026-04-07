@@ -206,8 +206,7 @@
                     class="absolute -inset-4 bg-[#F97316] opacity-0 group-hover:opacity-10 blur-xl transition-all duration-500 rounded-full">
                 </div>
                 <div class="mr-3">
-                    <img src="{{ asset('images/logo.jpg') }}" alt="Logo"
-                        class="h-16 w-auto object-contain drop-shadow-md rounded">
+                    <x-logo class="h-12 w-auto" />
                 </div>
                 <div>
                     <span class="text-2xl font-extrabold tracking-tight text-white">OPTI-<span
@@ -317,170 +316,19 @@
     <div class="flex-1 flex flex-col h-screen overflow-hidden">
 
         <!-- Header Glass - Barre de recherche toujours visible -->
-        <header
-            class="glass h-auto lg:h-20 flex flex-col lg:flex-row items-center justify-between px-3 sm:px-4 lg:px-8 py-2 lg:py-0 z-30 shrink-0 shadow-lg">
-
-            <!-- Ligne supérieure mobile : menu + titre + icône admin -->
-            <div class="flex items-center justify-between w-full lg:hidden mb-2">
-                <div class="flex items-center gap-2">
-                    <button @click="sidebarOpen = !sidebarOpen"
-                        class="text-white hover:text-[#F97316] focus:outline-none p-2 rounded-xl hover:bg-white/10 transition-all duration-300">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h7"></path>
-                        </svg>
-                    </button>
-                    <div class="h-6 w-px bg-gray-600"></div>
-                    <h1 class="text-sm font-bold text-white">
-                        @yield('header_title', 'Espace Admin')</h1>
-                </div>
-
-                <!-- Menu Admin Dropdown Mobile -->
-                <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                    <button @click="open = !open"
-                        class="relative p-2 text-white hover:text-[#F97316] transition-all rounded-xl hover:bg-white/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown Menu Mobile -->
-                    <div x-show="open" x-cloak
-                        class="absolute right-0 mt-2 w-56 bg-[#1d3566] rounded-xl shadow-2xl border border-[#F97316]/30 overflow-hidden dropdown-open z-50"
-                        style="display: none;">
-                        <div class="py-2">
-                            @if(auth()->user()->is_super_admin)
-                                <a href="{{ route('admin.create') }}"
-                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                    <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
-                                        </path>
-                                    </svg>
-                                    <span>Nouvel Admin</span>
-                                </a>
-                                <a href="{{ route('admin.logs.index') }}"
-                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                    <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                    <span>Journal d'activités</span>
-                                </a>
-                            @endif
-                            <a href="{{ route('admin.profile.edit') }}"
-                                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                                    </path>
-                                </svg>
-                                <span>Paramètres</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Barre de recherche - Réduite sur mobile -->
-            <div class="w-full lg:w-auto">
-                @php
-                    $searchAction = route('home');
-                    $searchPlaceholder = 'Rechercher des formations...';
-
-                    if (request()->routeIs('admin.users.*')) {
-                        $searchAction = route('admin.users.index');
-                        $searchPlaceholder = 'Rechercher un utilisateur...';
-                    } elseif (request()->routeIs('admin.payments.*')) {
-                        $searchAction = route('admin.payments.index');
-                        $searchPlaceholder = 'Rechercher un paiement...';
-                    } elseif (request()->routeIs('admin.courses.*')) {
-                        $searchAction = route('admin.courses.index');
-                        $searchPlaceholder = 'Rechercher une formation...';
-                    }
-                @endphp
-                <form action="{{ $searchAction }}" method="GET"
-                    class="flex items-center bg-[#1d3566] rounded-full px-3 py-1.5 lg:px-4 lg:py-2.5 shadow-lg border border-[#F97316]/30 focus-within:border-[#F97316] focus-within:ring-2 focus-within:ring-[#F97316]/30 transition-all duration-300">
-                    <svg class="w-3.5 h-3.5 lg:w-4 lg:h-4 text-[#F97316]" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input type="text" name="search" value="{{ request('search') }}"
-                        placeholder="{{ $searchPlaceholder }}"
-                        class="ml-2 text-xs lg:text-sm bg-transparent border-none focus:ring-0 focus:outline-none text-white placeholder-gray-400 w-full lg:w-80 transition-all duration-300">
-                </form>
-            </div>
-
-            <!-- Actions desktop (inchangées) -->
-            <div class="hidden lg:flex items-center gap-3">
-                <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                    <button @click="open = !open"
-                        class="relative p-2.5 text-white hover:text-[#F97316] transition-all rounded-xl hover:bg-white/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                            </path>
-                        </svg>
-                    </button>
-                    <div x-show="open" x-cloak
-                        class="absolute right-0 mt-2 w-56 bg-[#1d3566] rounded-xl shadow-2xl border border-[#F97316]/30 overflow-hidden dropdown-open"
-                        style="display: none;">
-                        <div class="py-2">
-                            @if(auth()->user()->is_super_admin)
-                                <a href="{{ route('admin.create') }}"
-                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                    <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z">
-                                        </path>
-                                    </svg>
-                                    <span>Nouvel Administrateur</span>
-                                </a>
-                                <a href="{{ route('admin.logs.index') }}"
-                                    class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                    <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                    <span>Journal d'activités</span>
-                                </a>
-                            @endif
-                            <a href="{{ route('admin.profile.edit') }}"
-                                class="flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:text-white hover:bg-white/10 transition-colors">
-                                <svg class="w-5 h-5 text-[#F97316]" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                                    </path>
-                                </svg>
-                                <span>Paramètres du compte</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <button onclick="confirmLogout()"
-                    class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white text-sm font-semibold rounded-xl transition-all group border border-red-500/20">
-                    <svg class="w-4 h-4 transform rotate-180 group-hover:-translate-x-1 transition-transform"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                        </path>
-                    </svg>
-                    Déconnexion
-                </button>
-            </div>
-        </header>
+        @php
+            $searchAction = route('home');
+            
+            if (request()->routeIs('admin.users.*')) {
+                $searchAction = route('admin.users.index');
+            } elseif (request()->routeIs('admin.payments.*')) {
+                $searchAction = route('admin.payments.index');
+            } elseif (request()->routeIs('admin.courses.*')) {
+                $searchAction = route('admin.courses.index');
+            }
+        @endphp
+        <!-- Main Unified Navbar -->
+        <x-navbar :showSidebarToggle="true" :searchAction="$searchAction" :hideCart="true" />
 
         <!-- Scrollable Content -->
         <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">

@@ -25,7 +25,9 @@ class EnforceAccountInterface
                 'logout',
                 'dashboard', // Si une route neutre dashboard existe
                 'verify',    // Public : utilitaire de scan de certificat
-                'formations' // Détails des formations publics
+                'formations',// Détails des formations publics
+                'cart',      // Accès au panier
+                ''           // Accueil racine
             ];
 
             // Ignorer les requêtes techniques ou d'API
@@ -35,8 +37,15 @@ class EnforceAccountInterface
                            $request->is('livewire/*') ||
                            $request->is('_debugbar/*');
 
-            // Si la racine '/' (prefix null) ou si le préfixe n'est pas autorisé
-            if (!$isTechnical && ($prefix === null || !in_array($prefix, $allowedPrefixes))) {
+            // Si le préfixe n'est pas autorisé
+            $checkedPrefix = $prefix ?? '';
+            
+            // Exceptions spéciales pour permettre à tout le monde d'accéder au paiement et visionnage
+            $isCheckoutOrPayment = $request->is('apprenant/checkout*') || 
+                                   $request->is('apprenant/payment*') || 
+                                   $request->is('apprenant/courses/*/watch');
+
+            if (!$isTechnical && !$isCheckoutOrPayment && !in_array($checkedPrefix, $allowedPrefixes)) {
                 return redirect()->route($role . '.dashboard');
             }
         }

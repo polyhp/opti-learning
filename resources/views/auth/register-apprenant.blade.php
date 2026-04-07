@@ -21,11 +21,9 @@
                         <div class="h-full flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center space-x-3 mb-8">
-                                    <a href="{{ url('/') }}" class="h-12 bg-white rounded flex items-center justify-center p-1 hover:scale-105 transition-transform duration-300">
-                                        <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning"
-                                            class="h-full w-auto object-contain">
-                                    </a>
-                                    <span class="text-2xl font-bold">OPTI-LEARNING</span>
+                                    <div class="bg-white rounded p-1 hover:scale-105 transition-transform duration-300">
+                                        <x-logo />
+                                    </div>
                                 </div>
                                 <h2 class="text-3xl font-bold mb-4">Devenez Apprenant</h2>
                                 <p class="text-orange-100 mb-6">Accédez à des formations de qualité et développez vos
@@ -62,10 +60,10 @@
                         <!-- Bandeau Orange attractif pour mobile/tablette -->
                         <div class="md:hidden bg-gradient-to-r from-orange-500 to-orange-600 p-5 text-white text-center">
                             <div class="flex items-center justify-center space-x-3 mb-3">
-                                <a href="{{ url('/') }}" class="h-12 w-12 bg-white rounded-lg flex items-center justify-center shadow-lg hover:scale-105 transition-transform duration-300 block">
-                                    <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning"
-                                        class="h-10 w-auto object-contain mx-auto">
-                                </a>
+                                <div
+                                    class="bg-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 block p-1">
+                                    <x-logo />
+                                </div>
                                 <span class="text-2xl font-bold">OPTI-LEARNING</span>
                             </div>
                             <h3 class="text-lg font-bold mb-1">✨ Bienvenue sur OptiLearning ✨</h3>

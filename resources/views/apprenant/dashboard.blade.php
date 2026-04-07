@@ -117,7 +117,7 @@
                                     </a>
 
                                     @if($course->can_download_certificate)
-                                        <a href="{{ route('apprenant.certificate.download', $course->id) }}"
+                                        <a href="{{ route('apprenant.certificate.download', $course->id) }}" target="_blank"
                                             class="flex-none bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600 hover:text-white p-2.5 rounded-xl transition-all"
                                             title="Télécharger le certificat PDF">
                                             <i class="fas fa-award text-lg"></i>

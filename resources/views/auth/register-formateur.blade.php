@@ -14,9 +14,9 @@
                             <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Devenir Formateur</h1>
                             <p class="text-orange-100">Partagez votre expertise et gagnez de l'argent</p>
                         </div>
-                        <a href="{{ url('/') }}" class="bg-white p-2 rounded w-16 h-12 flex items-center justify-center hover:scale-105 transition-transform duration-300">
-                            <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="w-full h-full object-contain">
-                        </a>
+                        <div class="bg-white p-2 rounded flex items-center justify-center hover:scale-105 transition-transform duration-300">
+                            <x-logo />
+                        </div>
                     </div>
                 </div>
 

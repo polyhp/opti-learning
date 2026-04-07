@@ -28,40 +28,8 @@
         .lesson-item.active { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-left: 4px solid #F97316; }
         .lesson-item.active .lesson-title-text { color: #F97316; }
         
-        /* Sidebar Mobile Styles - Sans overlay */
-        .sidebar-mobile {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 85%;
-            max-width: 320px;
-            height: 100vh;
-            z-index: 1000;
-            transform: translateX(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.3);
-        }
-        .sidebar-mobile.open {
-            transform: translateX(0);
-        }
-        
-        @media (min-width: 1024px) {
-            .sidebar-mobile {
-                position: relative;
-                transform: translateX(0) !important;
-                max-width: none;
-                width: 25%;
-                box-shadow: none;
-            }
-        }
-        
         .quiz-option-label { transition: all 0.2s ease; }
         .quiz-option-label:hover { background: rgba(249, 115, 22, 0.1); border-color: rgba(249, 115, 22, 0.5); }
-        
-        /* Empêcher le scroll du body quand le menu est ouvert */
-        body.menu-open {
-            overflow: hidden;
-        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-900 to-slate-800 text-slate-200 font-sans h-screen flex flex-col overflow-hidden">
@@ -69,15 +37,11 @@
     <!-- Navbar -->
     <header class="bg-slate-900/95 backdrop-blur-sm border-b border-slate-700 h-auto min-h-16 flex items-center justify-between px-3 sm:px-6 py-2 flex-shrink-0 shadow-lg z-50 relative">
         <div class="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
-            <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-orange-500 hover:text-white transition-colors flex items-center justify-center flex-shrink-0 shadow-md">
-                <i class="fas fa-bars text-lg"></i>
-            </button>
             
             <a href="{{ Auth::user()->hasRole('formateur') ? route('formateur.dashboard') : route('apprenant.dashboard') }}" class="flex items-center space-x-2 flex-shrink-0">
-                <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center shadow-lg shadow-orange-500/30">
-                    <i class="fas fa-graduation-cap text-white text-sm"></i>
+                <div class="h-8 sm:h-10 flex items-center justify-center transform transition-all duration-300">
+                    <img src="{{ asset('images/logo optilearning.jpg') }}" alt="OptiLearning" class="h-full w-auto object-contain rounded drop-shadow-md">
                 </div>
-                <span class="text-lg sm:text-xl font-head font-bold text-white hidden sm:block">OPTI<span class="text-orange-500">LEARNING</span></span>
             </a>
             
             <div class="h-6 w-px bg-slate-700 hidden sm:block"></div>
@@ -95,6 +59,9 @@
         </div>
         
         <div class="flex items-center space-x-2 sm:space-x-4">
+            <button onclick="toggleSidebar()" class="lg:hidden text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 p-2 rounded-lg flex items-center shadow-sm border border-slate-700 transition mr-1 sm:mr-2">
+                <i class="fas fa-list-ul"></i>
+            </button>
             <div class="hidden md:flex items-center space-x-3">
                 <span class="text-xs font-semibold text-slate-400" id="progress-text">0% complété</span>
                 <div class="w-32 h-2 bg-slate-700 rounded-full overflow-hidden">
@@ -116,7 +83,7 @@
     <div class="flex-grow flex flex-col lg:flex-row overflow-hidden relative">
         
         <!-- Main Player Area -->
-        <main class="flex-grow flex flex-col relative bg-gradient-to-b from-slate-900 to-slate-800 overflow-y-auto w-full lg:w-3/4">
+        <main class="flex-grow flex flex-col relative bg-gradient-to-b from-slate-900 to-slate-800 lg:w-3/4 overflow-y-auto w-full border-b lg:border-b-0 lg:border-r border-slate-700">
             
             <div class="w-full bg-black relative flex items-center justify-center flex-shrink-0" id="player-container" style="height: 55vh; max-height: 550px; min-height: 280px;">
                 @if($course->lessons->count() > 0)
@@ -327,8 +294,11 @@
             
         </main>
         
-        <!-- Sidebar - Version mobile sans overlay -->
-        <aside id="sidebar" class="sidebar-mobile bg-gradient-to-b from-slate-800 to-slate-900 border-l border-slate-700 flex flex-col flex-shrink-0 shadow-2xl">
+        <!-- Mobile Sidebar Overlay (Background) -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden backdrop-blur-sm" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="bg-gradient-to-b from-slate-800 to-slate-900 flex flex-col flex-shrink-0 w-[80vw] max-w-[320px] lg:max-w-none lg:w-1/4 h-[calc(100vh-64px)] lg:max-h-full overflow-hidden fixed lg:relative bottom-0 right-0 z-50 transform translate-x-full lg:translate-x-0 transition-transform duration-300 shadow-2xl lg:shadow-none border-l border-slate-700">
             <div class="p-4 sm:p-5 border-b border-slate-700 bg-slate-800/90 sticky top-0 z-20 flex justify-between items-center">
                 <div>
                     <h3 class="text-white font-head font-bold text-base sm:text-lg">Contenu du cours</h3>
@@ -336,7 +306,7 @@
                         <span class="text-xs text-slate-400 font-medium">{{ $course->lessons->count() }} leçons</span>
                     </div>
                 </div>
-                <button id="close-sidebar-btn" class="lg:hidden w-8 h-8 rounded-lg bg-slate-700 text-slate-400 hover:bg-red-500 hover:text-white transition-colors flex items-center justify-center">
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-white p-2 border border-slate-700 rounded-lg hover:bg-slate-700 transition">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -420,45 +390,6 @@
     </div>
 
     <script>
-        // Mobile sidebar management - Version simplifiée sans overlay
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-        const sidebar = document.getElementById('sidebar');
-        
-        function openMobileSidebar() {
-            if(window.innerWidth < 1024) {
-                sidebar.classList.add('open');
-                document.body.classList.add('menu-open');
-            }
-        }
-        
-        function closeMobileSidebar() {
-            sidebar.classList.remove('open');
-            document.body.classList.remove('menu-open');
-        }
-        
-        if(mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', openMobileSidebar);
-        }
-        
-        if(closeSidebarBtn) {
-            closeSidebarBtn.addEventListener('click', closeMobileSidebar);
-        }
-        
-        // Fermer avec la touche Echap
-        document.addEventListener('keydown', function(event) {
-            if(event.key === 'Escape' && sidebar.classList.contains('open')) {
-                closeMobileSidebar();
-            }
-        });
-        
-        // Close sidebar on lesson click on mobile
-        function closeSidebarIfMobile() {
-            if(window.innerWidth < 1024) {
-                closeMobileSidebar();
-            }
-        }
-        
         setTimeout(() => { if(document.getElementById('flashInfo')) document.getElementById('flashInfo').style.display = 'none'; }, 4000);
 
         let completedLessons = {{ count($completedLessonIds) }};
@@ -544,8 +475,14 @@
                 if(player) player.pause();
                 window.open(url, '_blank');
             }
-            
-            closeSidebarIfMobile();
+
+            // Fermer automatiquement le sidebar sur mobile
+            if (window.innerWidth < 1024) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar && !sidebar.classList.contains('translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
         }
         
         window.addEventListener('DOMContentLoaded', () => {
@@ -580,7 +517,14 @@
                 container.classList.add('active');
                 container.style.borderLeft = '4px solid #F97316';
             }
-            closeSidebarIfMobile();
+
+            // Fermer automatiquement le sidebar sur mobile
+            if (window.innerWidth < 1024) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar && !sidebar.classList.contains('translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
         }
 
         function submitQuizContent(e, form) {
@@ -647,12 +591,18 @@
             document.getElementById('tab-' + tabId).style.display = 'block';
         }
         
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            if(window.innerWidth >= 1024) {
-                closeMobileSidebar();
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('translate-x-full')) {
+                sidebar.classList.remove('translate-x-full');
+                if (overlay) overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('translate-x-full');
+                if (overlay) overlay.classList.add('hidden');
             }
-        });
+        }
+        
     </script>
 </body>
 </html>

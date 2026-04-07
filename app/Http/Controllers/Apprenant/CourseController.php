@@ -68,6 +68,79 @@ class CourseController extends Controller
     }
 
     /**
+     * Simulation de paiement pour le panier
+     */
+    public function checkoutCart(Request $request)
+    {
+        $cartIds = session('cart', []);
+        
+        if (empty($cartIds)) {
+            return redirect()->route('cart.index', [], 303)->with('error', 'Votre panier est vide.');
+        }
+        
+        $user = Auth::user();
+        $courses = Course::whereIn('id', $cartIds)->get();
+        $createdOrders = [];
+        
+        foreach ($courses as $course) {
+            // Vérifier s'il a déjà une commande complète
+            $existingOrder = Order::where('user_id', $user->id)
+                ->where('course_id', $course->id)
+                ->where('status', 'completed')
+                ->first();
+                
+            if ($existingOrder) {
+                continue; // Déjà acheté
+            }
+
+            // Vérifier s'il a déjà une commande en attente
+            $pendingOrder = Order::where('user_id', $user->id)
+                ->where('course_id', $course->id)
+                ->where('status', 'pending')
+                ->first();
+
+            $status = $course->price > 0 ? 'pending' : 'completed';
+
+            if (!$pendingOrder) {
+                $order = Order::create([
+                    'user_id' => $user->id,
+                    'course_id' => $course->id,
+                    'amount' => $course->price,
+                    'status' => $status,
+                ]);
+                
+                if ($order->status == 'pending') {
+                    $createdOrders[] = $order->id;
+                }
+            } else {
+                $createdOrders[] = $pendingOrder->id;
+            }
+        }
+        
+        // Vider le panier après la création des commandes
+        session()->forget('cart');
+        
+        if (empty($createdOrders)) {
+            $userRole = 'apprenant';
+            if ($user->is_super_admin || $user->hasRole('admin')) {
+                $userRole = 'admin';
+            } elseif ($user->hasRole('formateur')) {
+                $userRole = 'formateur';
+            }
+            return redirect()->route($userRole . '.dashboard')->with('info', 'Toutes les formations de votre panier sont gratuites ou déjà achetées.');
+        }
+        
+        // S'il y a un seul ordre, on utilise la route normale
+        if (count($createdOrders) == 1) {
+            return redirect()->route('apprenant.payment.show', $createdOrders[0]);
+        }
+        
+        // S'il y a plusieurs ordres, on passe la liste (ex: 15,16) en paramètre HTTP
+        $orderIdsStr = implode(',', $createdOrders);
+        return redirect()->route('apprenant.payment.show', ['order' => $orderIdsStr]);
+    }
+
+    /**
      * Interface de visionnage
      */
     public function watch(Course $course)

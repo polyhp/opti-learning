@@ -29,19 +29,19 @@
 
         <h1 class="text-2xl font-head font-bold text-navy-900 mb-2">Finaliser votre achat</h1>
 
-        <p class="text-slate-500 mb-8">Formation :
-            <span class="font-semibold text-slate-800">{{ $order->course->title ?? '...' }}</span>
+        <p class="text-slate-500 mb-8">Formation(s) :
+            <span class="font-semibold text-slate-800">{{ $paymentData['titles'] }}</span>
         </p>
 
         <div class="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
             <div class="flex justify-between items-center mb-3">
                 <span class="text-slate-500 text-sm">Montant à payer</span>
-                <span class="font-head font-bold text-xl text-navy-900">{{ number_format($order->amount, 0, ',', ' ') }}
+                <span class="font-head font-bold text-xl text-navy-900">{{ number_format($paymentData['amount'], 0, ',', ' ') }}
                     FCFA</span>
             </div>
             <div class="flex justify-between items-center">
                 <span class="text-slate-500 text-sm">N° Commande</span>
-                <span class="font-mono text-xs text-navy-400">#{{ str_pad($order->id, 6, '0', STR_PAD_LEFT) }}</span>
+                <span class="font-mono text-xs text-navy-400">#{{ str_pad(explode(',', $paymentData['id'])[0], 6, '0', STR_PAD_LEFT) }}{{ strpos($paymentData['id'], ',') !== false ? '...' : '' }}</span>
             </div>
         </div>
 
@@ -77,10 +77,10 @@
 
                 payBtn.addEventListener('click', function () {
                     openKkiapayWidget({
-                        amount: {{ round($order->amount) }},
+                        amount: {{ round($paymentData['amount']) }},
                         position: "center",
-                        callback: "{{ route('apprenant.payment.verify', ['order_id' => $order->id]) }}",
-                        data: "{{ $order->id }}",
+                        callback: "{{ route('apprenant.payment.verify', ['order_id' => $paymentData['id']]) }}",
+                        data: "{{ $paymentData['id'] }}",
                         theme: "#f97316", // Tailwind orange-500
                         key: "{{ config('services.kkiapay.public_key') }}",
                         sandbox: {{ config('services.kkiapay.sandbox') ? 'true' : 'false' }} 

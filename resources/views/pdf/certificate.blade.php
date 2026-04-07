@@ -12,32 +12,21 @@
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
             margin: 0px;
-            padding: 0px;
-            line-height: 1.5;
+            padding: 20px;
             background-color: #0B1A3E;
-            /* Fond externe Bleu-nuit */
         }
 
         .page-wrap {
-            padding: 20px;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            overflow: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         .border-orange {
-            border: 4px solid #F97316;
-            height: 100%;
-            width: 100%;
-            box-sizing: border-box;
+            border: 6px solid #F97316;
             background-color: #ffffff;
             position: relative;
+            height: 740px;
+            box-sizing: border-box;
             overflow: hidden;
         }
 
@@ -48,8 +37,8 @@
             left: 20px;
             width: 100px;
             height: 100px;
-            border-top: 6px solid #0B1A3E;
-            border-left: 6px solid #0B1A3E;
+            border-top: 8px solid #0B1A3E;
+            border-left: 8px solid #0B1A3E;
         }
 
         .decor-bottom-right {
@@ -58,14 +47,15 @@
             right: 20px;
             width: 100px;
             height: 100px;
-            border-bottom: 6px solid #0B1A3E;
-            border-right: 6px solid #0B1A3E;
+            border-bottom: 8px solid #0B1A3E;
+            border-right: 8px solid #0B1A3E;
         }
 
         .watermark {
             position: absolute;
-            top: 300px;
-            left: 200px;
+            top: 240px;
+            left: 10%;
+            width: 80%;
             font-size: 90px;
             color: #fff5ec;
             z-index: 0;
@@ -75,7 +65,7 @@
         }
 
         .content {
-            padding: 70px 50px 0 50px;
+            padding: 90px 70px 0 70px;
             text-align: center;
             z-index: 10;
             position: relative;
@@ -111,41 +101,41 @@
             font-size: 14px;
             color: #F97316;
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 30px;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
             font-weight: bold;
         }
 
         .presented-to {
             font-size: 16px;
             margin-bottom: 15px;
-            color: #475569;
+            color: #080b10ff;
         }
 
         .student-name {
-            font-size: 38px;
+            font-size: 40px;
             color: #0B1A3E;
             font-family: 'Georgia', serif;
             font-style: italic;
             border-bottom: 2px solid #F97316;
             display: inline-block;
-            padding-bottom: 5px;
-            margin-bottom: 20px;
+            padding-bottom: 4px;
+            margin-bottom: 25px;
             min-width: 450px;
         }
 
         .description {
-            font-size: 16px;
+            font-size: 15px;
             margin: 0 auto;
-            max-width: 800px;
-            color: #475569;
+            max-width: 600px;
+            color: #030508ff;
         }
 
         .course-title {
             font-size: 24px;
             font-weight: bold;
             color: #0B1A3E;
-            margin: 15px 0 20px 0;
+            margin: 20px 0 25px 0;
             font-family: 'Georgia', serif;
         }
 
@@ -155,21 +145,21 @@
             color: #ffffff;
             padding: 8px 25px;
             border-radius: 50px;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
 
         .score-box span {
             color: #F97316;
             font-weight: bold;
-            font-size: 18px;
+            font-size: 17px;
         }
 
         .footer {
             margin-top: 50px;
             width: 100%;
             position: absolute;
-            bottom: 60px;
+            bottom: 50px;
             left: 0;
         }
 
@@ -188,25 +178,25 @@
             width: 80%;
             margin: 0 auto;
             border-bottom: 1px solid #0B1A3E;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .signature-name {
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             color: #0B1A3E;
         }
 
         .signature-title {
-            font-size: 14px;
+            font-size: 12px;
             color: #F97316;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         /* Médaille centrale */
         .medal {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             margin: 0 auto;
             background-color: #0B1A3E;
             border-radius: 50%;
@@ -217,29 +207,30 @@
         .medal-content {
             color: #ffffff;
             font-weight: bold;
-            font-size: 14px;
-            margin-top: 40px;
+            font-size: 12px;
+            margin-top: 35px;
             text-transform: uppercase;
         }
 
         .medal-accent {
             color: #F97316;
-            font-size: 16px;
+            font-size: 13px;
         }
 
         .certificate-code {
             position: absolute;
             bottom: 20px;
             left: 30px;
-            font-size: 11px;
+            font-size: 10px;
             color: #64748b;
             text-align: left;
         }
 
         .qr-code {
             position: absolute;
-            bottom: 20px;
-            right: 30px;
+            bottom: 50px;
+            right: 50px;
+            left: 20px;
         }
     </style>
 </head>
@@ -257,10 +248,10 @@
             <div class="content">
                 <div class="header">
                     @php
-                        $logoPath = public_path('images/logo.jpg');
-                        if(file_exists($logoPath)) {
+                        $logoPath = public_path('images/logo optilearning.jpg');
+                        if (file_exists($logoPath)) {
                             $logoData = base64_encode(file_get_contents($logoPath));
-                            echo '<img src="data:image/jpeg;base64,'.$logoData.'" alt="OptiLearning" style="height: 60px; object-fit: contain;">';
+                            echo '<img src="data:image/jpeg;base64,' . $logoData . '" alt="OptiLearning" style="height: 60px; object-fit: contain;">';
                         } else {
                             echo '<div class="logo">OPTI<span class="logo-accent">LEARNING</span></div>';
                         }
@@ -291,7 +282,8 @@
                         <td>
                             <div class="signature-line"></div>
                             <div class="signature-name">{{ $course->formateur->user->first_name }}
-                                {{ $course->formateur->user->last_name }}</div>
+                                {{ $course->formateur->user->last_name }}
+                            </div>
                             <div class="signature-title">Instructeur Principal</div>
                         </td>
                         <td>
@@ -306,7 +298,8 @@
                             <div class="signature-line"></div>
                             <div class="signature-name">Direction OptiLearning</div>
                             <div class="signature-title">Délivré le
-                                {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d/m/Y') }}</div>
+                                {{ \Carbon\Carbon::parse($certificate->issued_at)->format('d/m/Y') }}
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -319,7 +312,7 @@
 
             <div class="qr-code">
                 <img src="data:image/svg+xml;base64,{{ $qrcode }}" width="80" height="80" alt="QR Code"
-                    style="border: 2px solid #0B1A3E; padding: 2px;">
+                    style="border: 2px solid #0B1A3E; padding: 3px;">
             </div>
         </div>
     </div>

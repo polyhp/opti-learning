@@ -339,7 +339,7 @@
                                     <a href="{{ route('apprenant.courses.watch', $course->id) }}"
                                         class="flex-grow text-center bg-navy-900 hover:bg-navy-800 text-white text-sm font-medium py-2.5 rounded-xl transition-colors">{{ $course->custom_progress == 100 ? 'Réviser' : 'Continuer' }}</a>
                                     @if($course->can_download_certificate)<a
-                                        href="{{ route('apprenant.certificate.download', $course->id) }}"
+                                        href="{{ route('apprenant.certificate.download', $course->id) }}" target="_blank"
                                         class="flex-none bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-700 p-2.5 rounded-xl transition-colors border-2 border-emerald-200"
                                     title="Télécharger le certificat"><i class="fas fa-award text-lg"></i></a>@else<button
                                             disabled

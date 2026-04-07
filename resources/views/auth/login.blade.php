@@ -15,10 +15,8 @@
         <div class="relative w-full max-w-md">
             <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
                 <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center">
-                    <div class="inline-flex items-center justify-center h-20 mb-4 p-2 bg-white rounded hover:scale-105 transition-transform duration-300">
-                        <a href="{{ url('/') }}" class="h-full block">
-                            <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="h-full w-auto object-contain drop-shadow-md">
-                        </a>
+                    <div class="inline-flex items-center justify-center mb-4 p-2 bg-white rounded hover:scale-105 transition-transform duration-300">
+                        <x-logo />
                     </div>
                     <p class="text-orange-100 mt-2">Connectez-vous à votre compte</p>
                 </div>

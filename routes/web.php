@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function (\Illuminate\Http\Request $request) {
     $search = $request->query('search');
     $categoryId = $request->query('category');
+    $trainerId = $request->query('trainer');
+    $title = $request->query('title');
+    $priceMax = $request->query('price_max');
     $showAll = $request->query('all');
 
     // Catégories avec comptage
@@ -23,9 +26,10 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         ->where('status', 'approved');
 
     // Moteur de recherche et filtres
-    if ($search || $categoryId || $showAll) {
+    if ($search || $categoryId || $showAll || $trainerId || $title || $priceMax) {
         $query = clone $baseQuery;
         
+        // Recherche générique textuelle (anciens formulaires ou saisies simples)
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
@@ -40,13 +44,29 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
             });
         }
 
+        // Filtre spécifique Catégorie
         if ($categoryId) {
             $query->where('category_id', $categoryId);
         }
 
+        // Filtre spécifique Formateur
+        if ($trainerId) {
+            $query->where('formateur_id', $trainerId);
+        }
+
+        // Filtre spécifique Titre
+        if ($title) {
+            $query->where('title', 'like', "%{$title}%");
+        }
+
+        // Filtre spécifique Prix Max
+        if ($priceMax) {
+            $query->where('price', '<=', $priceMax);
+        }
+
         $searchResults = $query->latest()->paginate(12)->withQueryString();
         
-        return view('welcome', compact('categories', 'searchResults', 'search', 'categoryId', 'showAll'));
+        return view('welcome', compact('categories', 'searchResults', 'search', 'categoryId', 'trainerId', 'title', 'priceMax', 'showAll'));
     }
 
     // Listes par défaut
@@ -71,6 +91,11 @@ Route::get('/formations/{course}', [\App\Http\Controllers\PublicCourseController
 
 // Route de vérification de certificat (Publique)
 Route::get('/verify/{code}', [\App\Http\Controllers\Apprenant\CertificateController::class, 'verify'])->name('verify.certificate');
+
+// Routes du Panier
+Route::match(['GET', 'POST'], '/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{course}', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::delete('/cart/remove/{course}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 
 // Routes d'authentification
 Route::group([], function () {
@@ -128,6 +153,7 @@ Route::middleware(['auth'])->group(function () {
 
         // Paiement et Visionnage
         Route::post('/checkout', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkout'])->name('apprenant.checkout');
+        Route::post('/checkout/cart', [\App\Http\Controllers\Apprenant\CourseController::class, 'checkoutCart'])->name('apprenant.checkout.cart');
         Route::get('/payment/{order}', [\App\Http\Controllers\Apprenant\PaymentController::class, 'show'])->name('apprenant.payment.show');
         Route::get('/payment/verify/kkiapay', [\App\Http\Controllers\Apprenant\PaymentController::class, 'verify'])->name('apprenant.payment.verify');
         Route::get('/courses/{course}/watch', [\App\Http\Controllers\Apprenant\CourseController::class, 'watch'])->name('apprenant.courses.watch');

@@ -14,14 +14,38 @@ class PaymentController extends Controller
     /**
      * Affiche la vue de paiement Kkiapay pour une commande.
      */
-    public function show(Order $order)
+    public function show($orderIds)
     {
-        // Vérifier que la commande appartient à l'utilisateur et qu'elle est en attente
-        if ($order->user_id !== auth()->id() || $order->status !== 'pending') {
-            return redirect()->route('dashboard')->with('error', 'Commande invalide ou déjà payée.');
+        $ids = explode(',', $orderIds);
+        $orders = Order::whereIn('id', $ids)->get();
+
+        if ($orders->isEmpty()) {
+            return redirect()->route('dashboard')->with('error', 'Commande invalide.');
         }
 
-        return view('apprenant.payment', compact('order'));
+        $courseTitles = [];
+        $totalAmount = 0;
+        foreach ($orders as $o) {
+            if ($o->user_id !== auth()->id() || $o->status !== 'pending') {
+                return redirect()->route('dashboard')->with('error', 'Commande invalide ou déjà payée.');
+            }
+            $totalAmount += $o->amount;
+            if ($o->course) {
+                $courseTitles[] = $o->course->title;
+            }
+        }
+
+        $titles = count($courseTitles) > 0 ? implode(', ', $courseTitles) : 'Formations multiples';
+
+        // Pour éviter l'utilisation de stdClass ou un modèle malformé dans la vue, 
+        // on passe les données directement ou sous forme de tableau
+        $paymentData = [
+            'id' => $orderIds,
+            'amount' => $totalAmount,
+            'titles' => $titles
+        ];
+
+        return view('apprenant.payment', compact('paymentData'));
     }
 
     /**
@@ -34,10 +58,11 @@ class PaymentController extends Controller
         
         // 1. Priorité à la vérification locale si le webhook est déjà passé
         if ($orderId) {
-            $order = Order::find($orderId);
+            $ids = explode(',', $orderId);
+            $order = Order::whereIn('id', $ids)->first();
             if ($order && $order->status === 'completed') {
-                return redirect()->route('apprenant.courses.watch', $order->course_id)
-                    ->with('success', 'Paiement déjà validé. Vous avez accès à la formation !');
+                return redirect()->route('apprenant.dashboard')
+                    ->with('success', 'Paiement déjà validé. Vous avez accès à vos formations !');
             }
         }
 
@@ -67,32 +92,41 @@ class PaymentController extends Controller
                 
                 // Kkiapay renvoie le statut (ex: SUCCESS)
                 if (isset($data['status']) && strtolower($data['status']) === 'success') {
-                    // Retrouver la commande par l'ID fourni par le callback ou webhook
-                    $order = $order ?? Order::find($data['state'] ?? $orderId);
+                    // Retrouver les commandes par les IDs
+                    $stateIds = $data['state'] ?? $orderId;
+                    $ids = explode(',', $stateIds);
+                    $orders = Order::whereIn('id', $ids)->get();
+                    $processed = false;
 
-                    if ($order && $order->status === 'pending') {
-                        $order->update([
-                            'status' => 'completed',
-                            'transaction_id' => $transactionId,
-                            'payment_method' => 'kkiapay'
-                        ]);
-                        
-                        Payment::updateOrCreate(
-                            ['reference' => $transactionId],
-                            [
-                                'order_id' => $order->id,
-                                'amount' => $order->amount,
-                                'gateway' => 'kkiapay',
-                                'status' => 'success',
-                                'gateway_response' => $data
-                            ]
-                        );
-                        
-                        return redirect()->route('apprenant.courses.watch', $order->course_id)
-                            ->with('success', 'Paiement effectué avec succès ! Vous avez maintenant accès à la formation.');
-                    } elseif ($order && $order->status === 'completed') {
-                        return redirect()->route('apprenant.courses.watch', $order->course_id)
-                            ->with('success', 'Paiement validé !');
+                    /** @var \App\Models\Order $order */
+                    foreach ($orders as $order) {
+                        if ($order->status === 'pending') {
+                            $order->update([
+                                'status' => 'completed',
+                                'transaction_id' => $transactionId,
+                                'payment_method' => 'kkiapay'
+                            ]);
+                            
+                            Payment::updateOrCreate(
+                                ['reference' => $transactionId . '-' . $order->id],
+                                [
+                                    'order_id' => $order->id,
+                                    'amount' => $order->amount,
+                                    'gateway' => 'kkiapay',
+                                    'status' => 'success',
+                                    'gateway_response' => $data
+                                ]
+                            );
+                            $processed = true;
+                        }
+                    }
+                    
+                    if ($processed) {
+                        return redirect()->route('apprenant.dashboard')
+                            ->with('success', 'Paiement effectué avec succès ! Vous avez maintenant accès à vos formations.');
+                    } else {
+                        return redirect()->route('apprenant.dashboard')
+                            ->with('success', 'Paiement déjà validé !');
                     }
                 }
             }
@@ -131,29 +165,33 @@ class PaymentController extends Controller
         
         if (isset($data['event']) && $data['event'] === 'PAYMENT_SUCCESS') {
             $transactionId = $data['transactionId'];
-            $orderId = $data['state']; // data passé dans le widget
+            $orderId = $data['state']; // data passé dans le widget (peut être "15,16")
             
-            $order = Order::find($orderId);
+            $ids = explode(',', $orderId);
+            $orders = Order::whereIn('id', $ids)->get();
             
-            if ($order && $order->status === 'pending') {
-                $order->update([
-                    'status' => 'completed',
-                    'transaction_id' => $transactionId,
-                    'payment_method' => 'kkiapay'
-                ]);
-                
-                Payment::updateOrCreate(
-                    ['reference' => $transactionId],
-                    [
-                        'order_id' => $order->id,
-                        'amount' => $order->amount,
-                        'gateway' => 'kkiapay',
-                        'status' => 'success',
-                        'gateway_response' => $data
-                    ]
-                );
-                
-                Log::info('Kkiapay Webhook: Commande et Paiement validés', ['order_id' => $orderId]);
+            /** @var \App\Models\Order $order */
+            foreach ($orders as $order) {
+                if ($order->status === 'pending') {
+                    $order->update([
+                        'status' => 'completed',
+                        'transaction_id' => $transactionId,
+                        'payment_method' => 'kkiapay'
+                    ]);
+                    
+                    Payment::updateOrCreate(
+                        ['reference' => $transactionId . '-' . $order->id],
+                        [
+                            'order_id' => $order->id,
+                            'amount' => $order->amount,
+                            'gateway' => 'kkiapay',
+                            'status' => 'success',
+                            'gateway_response' => $data
+                        ]
+                    );
+                    
+                    Log::info('Kkiapay Webhook: Commande et Paiement validés', ['order_id' => $order->id]);
+                }
             }
         }
         

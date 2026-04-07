@@ -24,9 +24,8 @@
                 <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mt-16 -mr-16"></div>
                     <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -mb-12 -ml-12"></div>
-                    <div
-                        class="inline-flex items-center justify-center h-20 leading-none bg-white p-2 rounded mb-4 shadow-lg transform transition-transform hover:scale-110 duration-300">
-                        <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="h-full w-auto object-contain">
+                    <div class="inline-flex justify-center mb-4 transform transition-transform hover:scale-110 duration-300">
+                        <x-logo />
                     </div>
                     <h2 class="text-2xl font-bold text-white">Mot de passe oublié</h2>
                     <p class="text-orange-100 mt-2">Réinitialisation en 3 étapes simples</p>

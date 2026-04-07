@@ -109,129 +109,10 @@
     @stack('styles')
 </head>
 
-<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col overflow-x-clip">
 
-    <!-- Header / Navbar -->
-    <header class="bg-navy-900 border-b border-navy-800 sticky top-0 z-50 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo -->
-                <div class="flex items-center space-x-3 shrink-0">
-                    <a href="{{ route('apprenant.dashboard') }}">
-                        <img src="{{ asset('images/logo.jpg') }}" alt="OptiLearning" class="h-16 w-auto rounded">
-                    </a>
-                </div>
-
-                <!-- Mobile Search Bar (Header) -->
-                <div class="md:hidden flex-1 mx-3">
-                    <form action="{{ route('apprenant.catalog') }}" method="GET" class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-navy-400 text-sm"></i>
-                        </div>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Rechercher..."
-                            class="block w-full pl-9 pr-3 py-2 bg-navy-800/80 border border-navy-700 rounded-full text-white placeholder-navy-300 focus:outline-none focus:bg-navy-700 focus:border-orange-500 text-xs sm:text-sm transition-all">
-                    </form>
-                </div>
-
-                <!-- Center Menu - Desktop -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('apprenant.dashboard') }}"
-                        class="text-white hover:text-orange-500 transition-colors border-b-2 border-transparent hover:border-orange-500 px-1 py-2 font-medium">Mon
-                        Apprentissage</a>
-                    <a href="{{ route('apprenant.catalog') }}"
-                        class="text-navy-300 hover:text-white transition-colors border-b-2 border-transparent hover:border-navy-300 px-1 py-2 font-medium">Catalogue</a>
-                </nav>
-
-                <!-- Search Bar in Header - Desktop -->
-                <div class="hidden lg:block flex-1 max-w-sm mx-6">
-                    <form action="{{ route('apprenant.catalog') }}" method="GET" class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-navy-300"></i>
-                        </div>
-                        <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Rechercher par formateur, mots ou lettres..."
-                            class="block w-full pl-11 pr-4 py-2 bg-navy-800/80 border border-navy-700 rounded-full shadow-inner text-white placeholder-navy-300 focus:outline-none focus:bg-white focus:text-navy-900 focus:placeholder-gray-500 focus:border-orange-500 focus:ring-2 focus:ring-orange-500/50 sm:text-sm transition-all duration-300">
-                    </form>
-                </div>
-
-                <!-- Right Nav - Desktop -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <!-- User Menu -->
-                    <div class="flex items-center space-x-3 cursor-pointer" onclick="openProfileModal()">
-                        <div class="text-right hidden sm:block">
-                            <div class="text-sm font-semibold text-white">{{ Auth::user()->first_name }}
-                                {{ Auth::user()->last_name }}</div>
-                            <div class="text-xs text-orange-500 font-medium tracking-wider uppercase">Apprenant</div>
-                        </div>
-                        <div
-                            class="w-10 h-10 rounded-full bg-navy-700 border-2 border-orange-500 flex items-center justify-center text-white font-bold">
-                            {{ substr(Auth::user()->first_name, 0, 1) }}{{ substr(Auth::user()->last_name, 0, 1) }}
-                        </div>
-                    </div>
-
-                    <!-- Logout Button -->
-                    <button onclick="confirmLogout()"
-                        class="bg-white/10 hover:bg-white/20 text-white p-2.5 rounded-xl transition-all duration-200"
-                        title="Me déconnecter">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
-
-                <!-- Mobile Menu Button (Hamburger) -->
-                <button id="mobileMenuBtn"
-                    class="md:hidden text-white hover:text-orange-500 transition-colors p-2 focus:outline-none">
-                    <i id="menuIcon" class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-
-            <!-- Mobile Menu Panel - Scrollable sans bloquer le body -->
-            <div id="mobileMenu"
-                class="hidden md:hidden bg-navy-800/95 backdrop-blur-sm rounded-2xl mt-2 mb-3 overflow-hidden border border-navy-700 shadow-xl mobile-menu-container">
-                <div class="overflow-y-auto" style="max-height: calc(100vh - 100px);">
-                    <!-- Section supprimée car déplacée dans le header -->
-
-                    <!-- Mobile Navigation Links -->
-                    <nav class="flex flex-col p-4 space-y-2">
-                        <a href="{{ route('apprenant.dashboard') }}"
-                            class="text-white hover:bg-navy-700 px-4 py-3 rounded-xl transition-colors flex items-center space-x-3"
-                            onclick="closeMobileMenu()">
-                            <i class="fas fa-graduation-cap w-5 text-orange-500"></i>
-                            <span class="font-medium">Mon Apprentissage</span>
-                        </a>
-                        <a href="{{ route('apprenant.catalog') }}"
-                            class="text-navy-200 hover:text-white hover:bg-navy-700 px-4 py-3 rounded-xl transition-colors flex items-center space-x-3"
-                            onclick="closeMobileMenu()">
-                            <i class="fas fa-book-open w-5 text-orange-400"></i>
-                            <span class="font-medium">Catalogue</span>
-                        </a>
-                    </nav>
-
-                    <!-- User Info Mobile -->
-                    <div class="border-t border-navy-700 p-4">
-                        <div class="flex items-center space-x-3 mb-4">
-                            <div
-                                class="w-12 h-12 rounded-full bg-navy-600 border-2 border-orange-500 flex items-center justify-center text-white font-bold text-lg">
-                                {{ substr(Auth::user()->first_name, 0, 1) }}{{ substr(Auth::user()->last_name, 0, 1) }}
-                            </div>
-                            <div>
-                                <div class="text-sm font-semibold text-white">{{ Auth::user()->first_name }}
-                                    {{ Auth::user()->last_name }}</div>
-                                <div class="text-xs text-orange-500 font-medium">Apprenant</div>
-                            </div>
-                        </div>
-
-                        <!-- Mobile Logout Button -->
-                        <button onclick="confirmLogout(); closeMobileMenu();"
-                            class="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl px-4 py-3 transition-all duration-200 flex items-center justify-center space-x-2 border border-red-500/20">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span class="font-medium">Se déconnecter</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Main Unified Navbar -->
+    <x-navbar :showSidebarToggle="false" :showProfile="true" :searchAction="route('apprenant.catalog')" />
 
     <!-- Main Content Area -->
     <div class="flex-grow flex flex-col md:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
@@ -263,16 +144,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-navy-900 border-t border-navy-800 py-6 mt-auto">
-        <div
-            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-navy-300 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>&copy; {{ date('Y') }} OptiLearning. Espace Apprenant. Tous droits réservés.</div>
-            <div class="flex space-x-4">
-                <a href="#" class="hover:text-white transition-colors">Support</a>
-                <a href="#" class="hover:text-white transition-colors">Politique de confidentialité</a>
-            </div>
-        </div>
-    </footer>
+    <x-footer />
 
     <!-- Modal de confirmation de déconnexion professionnel -->
     <div id="logoutConfirmModal" class="fixed inset-0 z-[200] hidden">
@@ -341,10 +213,15 @@
                     <p class="text-orange-500 font-semibold">Apprenant</p>
                 </div>
             </div>
-            <button onclick="closeProfileModal()"
-                class="w-full mt-6 bg-navy-900 hover:bg-navy-800 text-white py-2 rounded-xl transition-colors">
-                Fermer
-            </button>
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button onclick="confirmLogout()" class="flex-1 bg-red-100 text-red-600 hover:bg-red-200 py-2 rounded-xl font-medium transition-colors border border-red-200">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                </button>
+                <button onclick="closeProfileModal()"
+                    class="flex-1 bg-navy-900 hover:bg-navy-800 text-white py-2 rounded-xl transition-colors">
+                    Fermer
+                </button>
+            </div>
         </div>
     </div>
 
@@ -413,6 +290,7 @@
 
         // Fonction de confirmation de déconnexion professionnelle
         function confirmLogout() {
+            closeProfileModal();
             const modal = document.getElementById('logoutConfirmModal');
             if (modal) {
                 modal.classList.remove('hidden');

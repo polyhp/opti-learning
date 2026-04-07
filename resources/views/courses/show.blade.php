@@ -175,113 +175,8 @@
 <body
     class="bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 font-sans text-slate-200 antialiased flex flex-col min-h-screen">
 
-    <!-- Header Responsive -->
-    <header class="bg-navy-900/95 backdrop-blur-sm sticky top-0 z-50 shadow-2xl border-b-2 border-navy-700">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-wrap items-center justify-between gap-3 py-3 sm:py-0 sm:h-20">
-                <!-- Logo -->
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3 flex-shrink-0">
-                    <div
-                        class="w-16 h-16 rounded-xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
-                        @php
-                            $logoPath = asset('images/logo.jpg');
-                            $hasCustomLogo = file_exists(public_path('images/logo.jpg'));
-                        @endphp
-                        @if($hasCustomLogo)
-                            <img src="{{ $logoPath }}" alt="OptiLearning" class="w-full h-full object-cover">
-                        @else
-                            <i class="fas fa-graduation-cap text-white text-xl"></i>
-                        @endif
-                    </div>
-                    <span class="text-xl sm:text-2xl font-head font-bold text-white">
-                        OPTI<span class="text-orange-500">LEARNING</span>
-                    </span>
-                </a>
-
-                <!-- Boutons d'authentification - Version Desktop -->
-                <div class="hidden sm:flex items-center space-x-3 md:space-x-4">
-                    @auth
-                        <a href="{{ route('dashboard') }}"
-                            class="text-slate-300 hover:text-orange-400 font-medium transition-colors text-sm md:text-base px-3 py-2 rounded-lg hover:bg-navy-800 border border-transparent hover:border-navy-600">
-                            Mon Espace
-                        </a>
-                        <form method="POST" action="{{ route('logout') }}" class="inline" id="logout-form-desktop">
-                            @csrf
-                            <button type="button" onclick="confirmLogout(this)"
-                                class="text-slate-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-navy-800 border border-transparent hover:border-navy-600"
-                                title="Déconnexion">
-                                <i class="fas fa-sign-out-alt text-lg"></i>
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="text-slate-300 hover:text-orange-400 font-medium transition-colors text-sm md:text-base px-3 py-2 rounded-lg hover:bg-navy-800 border border-transparent hover:border-navy-600">
-                            Connexion
-                        </a>
-                        <a href="{{ route('register') }}"
-                            class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 px-4 py-2 md:px-5 md:py-2 rounded-full text-white font-medium transition-all shadow-lg shadow-orange-500/30 text-sm md:text-base">
-                            Inscription
-                        </a>
-                    @endauth
-                </div>
-
-                <!-- Menu Mobile - Bouton hamburger -->
-                <button id="mobileMenuBtn"
-                    class="sm:hidden text-white hover:text-orange-500 transition-colors p-2 focus:outline-none rounded-lg hover:bg-navy-800 border border-navy-700">
-                    <i id="menuIcon" class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-
-            <!-- Menu Mobile Déroulant -->
-            <div id="mobileMenu" class="sm:hidden hidden flex-col pb-4 space-y-2 border-t-2 border-navy-700 mt-2 pt-2">
-                @auth
-                    <a href="{{ route('dashboard') }}"
-                        class="text-slate-300 hover:bg-navy-800 px-4 py-2 rounded-lg transition-colors border border-navy-700 hover:border-orange-500">
-                        <i class="fas fa-tachometer-alt mr-3 w-5"></i> Mon Espace
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form-mobile">
-                        @csrf
-                        <button type="button" onclick="confirmLogout(this)"
-                            class="w-full text-left text-slate-300 hover:bg-navy-800 px-4 py-2 rounded-lg transition-colors border border-navy-700 hover:border-orange-500">
-                            <i class="fas fa-sign-out-alt mr-3 w-5"></i> Déconnexion
-                        </button>
-                    </form>
-                @else
-                    <a href="{{ route('login') }}"
-                        class="text-slate-300 hover:bg-navy-800 px-4 py-2 rounded-lg transition-colors border border-navy-700 hover:border-orange-500">
-                        <i class="fas fa-sign-in-alt mr-3 w-5"></i> Connexion
-                    </a>
-                    <a href="{{ route('register') }}"
-                        class="text-slate-300 hover:bg-navy-800 px-4 py-2 rounded-lg transition-colors border border-navy-700 hover:border-orange-500">
-                        <i class="fas fa-user-plus mr-3 w-5"></i> Inscription
-                    </a>
-                @endauth
-            </div>
-        </div>
-    </header>
-
-    <!-- Modal de confirmation de déconnexion -->
-    <div id="logoutModal" class="modal-confirm">
-        <div class="modal-content">
-            <div class="text-center">
-                <div
-                    class="w-16 h-16 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-orange-500/50">
-                    <i class="fas fa-sign-out-alt text-2xl text-orange-500"></i>
-                </div>
-                <h3 class="text-xl font-head font-bold text-white mb-2">Déconnexion</h3>
-                <p class="text-slate-300 text-sm">Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                <p class="text-slate-400 text-xs mt-2">Vous devrez vous reconnecter pour accéder à votre compte.</p>
-            </div>
-            <div class="modal-buttons">
-                <button onclick="cancelLogout()" class="modal-btn modal-btn-cancel">
-                    <i class="fas fa-times mr-2"></i> Annuler
-                </button>
-                <button onclick="proceedLogout()" class="modal-btn modal-btn-confirm">
-                    <i class="fas fa-check mr-2"></i> Déconnexion
-                </button>
-            </div>
-        </div>
-    </div>
+    <!-- Header Responsive (Composant Global) -->
+    <x-navbar />
 
     <!-- Héros de la formation -->
     <section
@@ -464,30 +359,14 @@
                                 <i class="fas fa-check-circle"></i> Vous possédez cette formation
                             </p>
                         @else
-                            @auth
-                                <form action="{{ route('apprenant.checkout') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
-                                    <button type="submit"
-                                        class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 sm:py-4 rounded-xl shadow-xl shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-base sm:text-lg mb-3 sm:mb-4">
-                                        @if($course->price > 0)
-                                            <i class="fas fa-shopping-cart mr-2"></i> Payer
-                                            {{ number_format($course->price, 0, ',', ' ') }} FCFA
-                                        @else
-                                            <i class="fas fa-graduation-cap mr-2"></i> S'inscrire gratuitement
-                                        @endif
-                                    </button>
-                                </form>
-                                <p class="text-center text-xs text-slate-400 mb-4 sm:mb-6">Paiement sécurisé par Mobile Money /
-                                    Carte</p>
-                            @else
-                                <a href="{{ route('login') }}"
-                                    class="block w-full text-center bg-navy-800 hover:bg-navy-700 text-white font-bold py-3 sm:py-4 rounded-xl shadow-lg transition-all transform hover:-translate-y-0.5 text-base sm:text-lg mb-3 sm:mb-4 border border-navy-600">
-                                    <i class="fas fa-sign-in-alt mr-2"></i> Se connecter pour acheter
-                                </a>
-                                <p class="text-center text-xs text-slate-400 mb-4 sm:mb-6">Vous devez avoir un compte pour
-                                    acheter cette formation.</p>
-                            @endauth
+                            <form action="{{ route('cart.add', $course->id) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 sm:py-4 rounded-xl shadow-xl shadow-orange-500/30 transition-all transform hover:-translate-y-0.5 text-base sm:text-lg mb-3 sm:mb-4">
+                                    <i class="fas fa-cart-plus mr-2"></i> Ajouter au panier
+                                </button>
+                            </form>
+                            <p class="text-center text-xs text-slate-400 mb-4 sm:mb-6">Vous pourrez valider votre panier plus tard.</p>
                         @endif
 
                         <div class="space-y-2 sm:space-y-3 pt-4 sm:pt-6 border-t-2 border-navy-600">
@@ -515,118 +394,13 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-navy-900 border-t-2 border-navy-700 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-400 text-xs sm:text-sm">
-            &copy; {{ date('Y') }} OptiLearning. Apprentissage Sécurisé. Tous droits réservés.
-        </div>
-    </footer>
+    <!-- Footer Global -->
+    <x-footer />
 
     <script>
-        // Variables pour la gestion de la déconnexion
-        let activeLogoutButton = null;
-
-        // Fonction pour afficher la modale de confirmation
-        function confirmLogout(button) {
-            activeLogoutButton = button;
-            const modal = document.getElementById('logoutModal');
-            modal.classList.add('active');
-            // Empêcher le scroll du body
-            document.body.style.overflow = 'hidden';
-        }
-
-        // Fonction pour annuler la déconnexion
-        function cancelLogout() {
-            const modal = document.getElementById('logoutModal');
-            modal.classList.remove('active');
-            activeLogoutButton = null;
-            // Réactiver le scroll du body
-            document.body.style.overflow = '';
-        }
-
-        // Fonction pour procéder à la déconnexion
-        function proceedLogout() {
-            if (activeLogoutButton) {
-                // Trouver le formulaire parent
-                const form = activeLogoutButton.closest('form');
-                if (form) {
-                    // Ajouter un indicateur de chargement
-                    const originalText = activeLogoutButton.innerHTML;
-                    activeLogoutButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Déconnexion...';
-                    activeLogoutButton.disabled = true;
-
-                    // Soumettre le formulaire
-                    form.submit();
-                } else {
-                    // Fallback: recharger la page avec le token CSRF
-                    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                    if (token) {
-                        fetch('{{ route('logout') }}', {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': token,
-                                'Content-Type': 'application/json'
-                            },
-                            credentials: 'same-origin'
-                        }).then(() => {
-                            window.location.href = '{{ route('login') }}';
-                        }).catch(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            }
-        }
-
-        // Fermer la modale avec la touche Echap
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                const modal = document.getElementById('logoutModal');
-                if (modal.classList.contains('active')) {
-                    cancelLogout();
-                }
-            }
-        });
-
-        // Fermer la modale en cliquant sur l'overlay
-        document.getElementById('logoutModal').addEventListener('click', function (event) {
-            if (event.target === this) {
-                cancelLogout();
-            }
-        });
-
-        // Menu mobile toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuIcon = document.getElementById('menuIcon');
-
-        if (mobileMenuBtn && mobileMenu) {
-            mobileMenuBtn.addEventListener('click', () => {
-                const isHidden = mobileMenu.classList.contains('hidden');
-                if (isHidden) {
-                    mobileMenu.classList.remove('hidden');
-                    menuIcon.classList.remove('fa-bars');
-                    menuIcon.classList.add('fa-times');
-                } else {
-                    mobileMenu.classList.add('hidden');
-                    menuIcon.classList.remove('fa-times');
-                    menuIcon.classList.add('fa-bars');
-                }
-            });
-        }
-
-        // Fermer le menu lors du redimensionnement en mode desktop
-        window.addEventListener('resize', () => {
-            if (window.innerWidth >= 640 && mobileMenu && !mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-                if (menuIcon) {
-                    menuIcon.classList.remove('fa-times');
-                    menuIcon.classList.add('fa-bars');
-                }
-            }
-        });
+        // Aucun JS personnalisé n'est nécessaire pour le navbar ici, 
+        // car le composant x-navbar intègre déjà son propre JS
+        // et le x-footer gère tout le reste.
     </script>
 </body>
 

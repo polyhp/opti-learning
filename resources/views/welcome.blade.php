@@ -6,9 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OptiLearning – Plateforme de Formation en Ligne</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link
+  <link <link
     href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
     rel="stylesheet">
+
+  <!-- Intégration Tailwind et FontAwesome pour les composants partagés -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: {
+              800: '#1d3566',
+              900: '#0B1A3E',
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
     /* ============================
    VARIABLES & RESET - COULEURS BLEU NUIT / ORANGE
@@ -48,6 +67,12 @@
       box-sizing: border-box;
     }
 
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     html {
       scroll-behavior: smooth;
     }
@@ -57,7 +82,6 @@
       background: var(--white);
       color: var(--navy);
       line-height: 1.5;
-      overflow-x: hidden;
     }
 
     img {
@@ -110,6 +134,7 @@
       color: var(--navy);
       line-height: 1.2;
       letter-spacing: -0.02em;
+      text-align: center;
     }
 
     .section-title .accent {
@@ -119,16 +144,18 @@
     .section-sub {
       font-size: 16px;
       color: var(--gray-text);
-      margin-top: 12px;
+      text-align: center;
+      margin-top: 8px;
     }
 
     .section-header {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
       gap: 16px;
-      margin-bottom: 48px;
+      text-align: center;
     }
 
     .see-all {
@@ -144,373 +171,6 @@
     .see-all:hover {
       gap: 10px;
       color: var(--orange-dark);
-    }
-
-    /* ============================
-   HEADER AVEC RECHERCHE INTÉGRÉE
-   ============================ */
-    header {
-      background: var(--navy);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: 0 4px 20px rgba(11, 26, 62, 0.3);
-    }
-
-    .header-main {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-      gap: 16px;
-    }
-
-    /* Logo */
-    .logo {
-
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      flex-shrink: 0;
-    }
-
-    .logo-image {
-      height: 200px;
-      width: 100%;
-      max-width: 200px;
-      object-fit: contain;
-      /*border-radius: 30%;*/
-    }
-
-    /* Barre de recherche dans le header */
-    .header-search {
-      flex: 1;
-      max-width: 500px;
-      margin: 0 16px;
-    }
-
-    @media (max-width: 1024px) {
-      .header-search {
-        display: none;
-      }
-    }
-
-    .header-search-form {
-      display: flex;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      transition: var(--transition-fast);
-      backdrop-filter: blur(4px);
-    }
-
-    .header-search-form:focus-within {
-      border-color: var(--orange);
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
-    }
-
-    .header-search-icon {
-      display: flex;
-      align-items: center;
-      padding-left: 14px;
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .header-search-input {
-      flex: 1;
-      border: none;
-      padding: 10px 12px;
-      font-size: 14px;
-      background: transparent;
-      outline: none;
-      color: var(--white);
-    }
-
-    .header-search-input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-
-    .header-search-select {
-      border: none;
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
-      padding: 10px 14px;
-      font-size: 13px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      outline: none;
-    }
-
-    .header-search-select option {
-      background: var(--navy);
-      color: var(--white);
-    }
-
-    .header-search-btn {
-      background: var(--orange);
-      border: none;
-      color: var(--white);
-      padding: 10px 24px;
-      border-radius: 0 var(--radius-md) var(--radius-md) 0;
-      font-size: 14px;
-      font-weight: 600;
-      transition: var(--transition-fast);
-      cursor: pointer;
-    }
-
-    .header-search-btn:hover {
-      background: var(--orange-lt);
-    }
-
-    /* Header actions - TOUJOURS VISIBLES sur tous les écrans */
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .btn-login {
-      padding: 8px 20px;
-      border: 1.5px solid rgba(255, 255, 255, 0.25);
-      background: transparent;
-      color: var(--white);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 500;
-      transition: var(--transition-fast);
-      white-space: nowrap;
-    }
-
-    .btn-login:hover {
-      border-color: var(--orange);
-      color: var(--orange);
-    }
-
-    .btn-signup {
-      padding: 8px 22px;
-      background: var(--orange);
-      border: none;
-      color: var(--white);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      transition: var(--transition-fast);
-      white-space: nowrap;
-    }
-
-    .btn-signup:hover {
-      background: var(--orange-lt);
-      transform: translateY(-1px);
-    }
-
-    /* Navigation desktop - visible uniquement sur desktop */
-    .nav-wrapper {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-
-    nav::-webkit-scrollbar {
-      display: none;
-    }
-
-    nav a {
-      color: rgba(255, 255, 255, 0.65);
-      padding: 14px 20px;
-      font-size: 14px;
-      font-weight: 500;
-      border-bottom: 2px solid transparent;
-      white-space: nowrap;
-      transition: var(--transition-fast);
-    }
-
-    nav a:hover,
-    nav a.active {
-      color: var(--white);
-      border-bottom-color: var(--orange);
-    }
-
-    /* Hamburger mobile - visible uniquement sur mobile/tablette */
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: transparent;
-      border: none;
-      padding: 8px;
-      cursor: pointer;
-    }
-
-    .hamburger span {
-      display: block;
-      width: 24px;
-      height: 2px;
-      background: var(--white);
-      border-radius: 2px;
-      transition: var(--transition-fast);
-    }
-
-    .hamburger.open span:nth-child(1) {
-      transform: translateY(7px) rotate(45deg);
-    }
-
-    .hamburger.open span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.open span:nth-child(3) {
-      transform: translateY(-7px) rotate(-45deg);
-    }
-
-    /* Mobile menu - visible uniquement quand ouvert sur mobile/tablette */
-    .mobile-menu {
-      display: none;
-      flex-direction: column;
-      background: var(--navy-mid);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 12px 0;
-    }
-
-    .mobile-menu.open {
-      display: flex;
-    }
-
-    .mobile-menu a {
-      color: rgba(255, 255, 255, 0.7);
-      padding: 14px 24px;
-      font-size: 15px;
-      font-weight: 500;
-      border-left: 3px solid transparent;
-      transition: var(--transition-fast);
-    }
-
-    .mobile-menu a:hover,
-    .mobile-menu a.active {
-      color: var(--white);
-      border-left-color: var(--orange);
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    /* ============================
-   RESPONSIVE - GESTION DES ÉCRANS
-   ============================ */
-
-    /* Tablette (769px - 1024px) */
-    @media (min-width: 769px) and (max-width: 1024px) {
-
-      /* Navigation desktop masquée */
-      .nav-wrapper {
-        display: none !important;
-      }
-
-      /* Hamburger visible */
-      .hamburger {
-        display: flex !important;
-      }
-
-      /* Boutons connexion/inscription RESTENT VISIBLES */
-      .header-actions {
-        display: flex !important;
-      }
-
-      /* Recherche masquée sur tablette */
-      .header-search {
-        display: none !important;
-      }
-
-      /* Ajustement des boutons pour tablette */
-      .btn-login,
-      .btn-signup {
-        padding: 6px 16px;
-        font-size: 13px;
-      }
-    }
-
-    /* Mobile (<= 768px) */
-    @media (max-width: 768px) {
-
-      /* Navigation desktop masquée */
-      .nav-wrapper {
-        display: none !important;
-      }
-
-      /* Hamburger visible */
-      .hamburger {
-        display: flex !important;
-      }
-
-      /* Boutons connexion/inscription RESTENT VISIBLES sur mobile */
-      .header-actions {
-        display: flex !important;
-      }
-
-      /* Recherche masquée sur mobile */
-      .header-search {
-        display: none !important;
-      }
-
-      /* Ajustement des boutons pour mobile */
-      .btn-login,
-      .btn-signup {
-        padding: 6px 14px;
-        font-size: 12px;
-      }
-
-      .hero-section {
-        padding: 40px 0 60px;
-      }
-
-      /* Réduction de l'espacement dans le header */
-      .header-main {
-        gap: 12px;
-        height: 64px;
-      }
-    }
-
-    /* Très petits mobiles (<= 480px) */
-    @media (max-width: 480px) {
-
-      .btn-login,
-      .btn-signup {
-        padding: 5px 10px;
-        font-size: 11px;
-      }
-
-      .logo-image {
-        height: 48px;
-      }
-
-      .header-main {
-        gap: 8px;
-      }
-    }
-
-    /* Desktop (>= 1025px) */
-    @media (min-width: 1025px) {
-      .nav-wrapper {
-        display: block !important;
-      }
-
-      .hamburger {
-        display: none !important;
-      }
-
-      .mobile-menu {
-        display: none !important;
-      }
-
-      .header-search {
-        display: block !important;
-      }
     }
 
     /* ============================
@@ -576,10 +236,7 @@
     /* Barre de recherche mobile (en bas de l'écran) */
     .mobile-search-bar {
       display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      position: relative;
       background: var(--navy);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       padding: 12px 16px;
@@ -669,7 +326,7 @@
     .course-card {
       background: var(--white);
       border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-border);
+      border: 2px solid #0B1A3E;
       overflow: hidden;
       transition: var(--transition);
       position: relative;
@@ -679,6 +336,8 @@
       transform: translateY(-8px);
       box-shadow: var(--shadow-hover);
       border-color: var(--orange-pale);
+      border: 4px solid #0B1A3E;
+
     }
 
     .card-thumb {
@@ -971,6 +630,9 @@
       font-size: 14px;
       color: var(--navy);
       margin-bottom: 4px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      hyphens: auto;
     }
 
     .cat-count {
@@ -1260,102 +922,137 @@
 <body>
 
   <!-- ===================== HEADER AVEC RECHERCHE INTÉGRÉE ===================== -->
-  <header>
-    <div class="container">
-      <div class="header-main">
-        <!-- Logo avec emplacement pour votre image -->
-        <a href="#" class="logo">
-          <img src="{{ asset('images/logo optilearning.jpg') }}" alt="OptiLearning" class="logo-image">
-        </a>
+  <!-- ===================== HEADER AVEC RECHERCHE INTÉGRÉE ===================== -->
+  <x-navbar />
 
-        <!-- Barre de recherche intégrée dans le header (desktop uniquement) -->
-        <div class="header-search">
-          <form action="{{ route('home') }}" method="GET" class="header-search-form">
-            <div class="header-search-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
+
+
+  <!-- ===================== CAROUSEL HERO SECTION ===================== -->
+  @if(!isset($searchResults) && isset($recentCourses) && $recentCourses->count() > 0)
+    <section class="relative overflow-hidden w-full h-[60vh] sm:h-[70vh] lg:h-[80vh] bg-[#060E24] group cursor-default"
+      x-data="{
+                  activeSlide: 0,
+                  slides: {{ count($recentCourses->take(5)) }},
+                  next() { this.activeSlide = this.activeSlide === this.slides - 1 ? 0 : this.activeSlide + 1 },
+                  prev() { this.activeSlide = this.activeSlide === 0 ? this.slides - 1 : this.activeSlide - 1 },
+                  startAutoPlay() { this.interval = setInterval(() => this.next(), 3000) },
+                  stopAutoPlay() { clearInterval(this.interval) }
+              }" x-init="startAutoPlay()" @mouseenter="stopAutoPlay()" @mouseleave="startAutoPlay()">
+
+      <div class="relative w-full h-full overflow-hidden">
+        @foreach($recentCourses->take(5) as $index => $course)
+          <!-- Slide -->
+          <div x-show="activeSlide === {{ $index }}" x-transition:enter="transition-opacity duration-1000 ease-in-out"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity duration-1000 ease-in-out" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0" class="absolute inset-0 w-full h-full" style="display: none;">
+
+            <!-- Image de couverture (Fond flouté) -->
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat blur-2xl opacity-40 scale-110"
+              style="background-image: url('{{ asset($course->thumbnail ?? 'images/default-course.jpg') }}');"></div>
+
+            <!-- Image de couverture au format original sans recadrage abusif -->
+            <div class="absolute inset-0 bg-contain bg-center bg-no-repeat w-[90%] md:w-[80%] mx-auto my-6 lg:my-10"
+              style="background-image: url('{{ asset($course->thumbnail ?? 'images/default-course.jpg') }}');"></div>
+
+            <!-- Overlay Sombre (dégradé pour rendre le texte lisible par dessus) -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0B1A3E] via-[#0B1A3E]/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-black/30"></div>
+
+            <!-- Contenu au premier plan -->
+            <div
+              class="container h-full relative z-10 flex flex-col justify-end pb-16 sm:pb-24 lg:pb-32 px-6 sm:px-12 text-center items-center">
+              <span
+                class="inline-block px-3 py-1 mb-4 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#F97316] bg-[#F97316]/20 backdrop-blur-md rounded-full border border-[#F97316]/30 animate-fade-in-up"
+                style="animation-delay: 0.1s;">
+                Nouveauté
+              </span>
+              <h1
+                class="text-3xl sm:text-4xl lg:text-6xl font-black text-white mb-4 sm:mb-6 max-w-4xl text-shadow-xl animate-fade-in-up"
+                style="animation-delay: 0.2s;">
+                {{ $course->title }}
+              </h1>
+              <p class="text-sm sm:text-lg lg:text-xl text-gray-200 mb-8 max-w-2xl line-clamp-2 animate-fade-in-up"
+                style="animation-delay: 0.3s;">
+                Par <span class="text-[#F97316] font-semibold">{{ $course->formateur->user->first_name ?? 'Expert' }}
+                  {{ $course->formateur->user->last_name ?? '' }}</span> · {{ $course->category->name ?? 'Général' }}
+              </p>
+
+              <div class="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto animate-fade-in-up"
+                style="animation-delay: 0.4s;">
+                <a href="{{ route('courses.show', $course->id) }}"
+                  class="px-6 py-3 sm:px-8 bg-gradient-to-r from-[#F97316] to-[#EA580C] hover:from-[#EA580C] hover:to-[#C2410C] text-white font-bold rounded-lg shadow-lg shadow-[#F97316]/30 transform transition hover:scale-105 flex items-center justify-center">
+                  <span>Découvrir</span>
+                  <i class="fas fa-arrow-right ml-2 text-sm"></i>
+                </a>
+
+                <form action="{{ route('cart.add', $course->id) }}" method="POST" class="inline w-full sm:w-auto">
+                  @csrf
+                  <button type="submit"
+                    class="w-full sm:w-auto px-6 py-3 sm:px-8 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-bold rounded-lg transition transform hover:scale-105 flex items-center justify-center">
+                    <i class="fas fa-cart-plus mr-2"></i> Ajouter au panier
+                  </button>
+                </form>
+              </div>
             </div>
-            <input type="text" name="search" class="header-search-input"
-              placeholder="Rechercher par formateur, mots ou lettres..." value="{{ request('search') }}">
-            <select name="category" class="header-search-select">
-              <option value="">Toutes catégories</option>
-              @foreach($categories as $cat)
-                <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}
-                </option>
-              @endforeach
-            </select>
-            <button type="submit" class="header-search-btn">Rechercher</button>
-          </form>
-        </div>
-
-        <!-- Actions desktop - TOUJOURS VISIBLES sur tous les écrans -->
-        <div class="header-actions">
-          <a href="{{route('login')}}" class="btn-login">Connexion</a>
-          <a href="{{route('register')}}" class="btn-signup">Inscription</a>
-        </div>
-
-        <!-- Hamburger mobile/tablette - visible sur tous les écrans sauf desktop -->
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
+          </div>
+        @endforeach
       </div>
-    </div>
 
-    <!-- Navigation desktop - visible uniquement sur desktop (>=1025px) -->
+      <!-- Flèche Précédent -->
+      <button @click="prev()"
+        class="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-black/40 hover:bg-[#F97316] text-white backdrop-blur-sm border border-white/20 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 z-20 shadow-lg">
+        <i class="fas fa-chevron-left sm:text-xl"></i>
+      </button>
 
+      <!-- Flèche Suivant -->
+      <button @click="next()"
+        class="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-black/40 hover:bg-[#F97316] text-white backdrop-blur-sm border border-white/20 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all duration-300 z-20 shadow-lg">
+        <i class="fas fa-chevron-right sm:text-xl"></i>
+      </button>
 
-    <!-- Menu mobile/tablette - visible uniquement quand ouvert -->
-    <div class="mobile-menu" id="mobileMenu">
-      <a href="#" class="active">Accueil</a>
-      <a href="#formations">Formations</a>
-      <a href="#categories">Catégories</a>
-      <a href="#">Contact</a>
-    </div>
-  </header>
-
-  <!-- Barre de recherche mobile (fixée en bas) -->
-  <div class="mobile-search-bar">
-    <form action="{{ route('home') }}" method="GET" class="mobile-search-form">
-      <input type="text" name="search" class="mobile-search-input" placeholder="Rechercher une formation..."
-        value="{{ request('search') }}">
-      <select name="category" class="header-search-select" style="display: none;">
-        <option value="">Toutes</option>
-      </select>
-      <button type="submit" class="mobile-search-btn">🔍</button>
-    </form>
-  </div>
-
-  <!-- ===================== HERO SECTION ===================== -->
-  <section class="hero-section">
-    <div class="container">
-      <div class="hero-content">
-        <h1>Trouvez la formation qui va <span class="highlight">transformer</span> votre carrière</h1>
-        <p>Plus de 100 formations disponibles · Paiement Mobile Money accepté · Certificats reconnus</p>
+      <!-- Indicateurs -->
+      <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 sm:space-x-3 z-20">
+        @foreach($recentCourses->take(5) as $index => $course)
+          <button @click="activeSlide = {{ $index }}" class="transition-all duration-300 rounded-full"
+            :class="activeSlide === {{ $index }} ? 'w-6 h-2 sm:w-8 sm:h-2.5 bg-[#F97316]' : 'w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white/50 hover:bg-white/80'"></button>
+        @endforeach
       </div>
-    </div>
-  </section>
+    </section>
+    <style>
+      .animate-fade-in-up {
+        animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  @endif
 
   @if(isset($searchResults))
     <!-- Résultats de recherche -->
     <section class="courses-section" style="min-height: 60vh;">
       <div class="container">
         <div class="section-header">
-          <div>
-            <span class="section-tag">Résultats</span>
-            <h2 class="section-title">
-              @if(request('all'))
-                Toutes les <span class="accent">formations</span>
-              @elseif(request('search'))
-                Recherche : <span class="accent">{{ request('search') }}</span>
-              @else
-                Catalogue des <span class="accent">formations</span>
-              @endif
-            </h2>
-            <p class="section-sub">{{ $searchResults->total() }} formation(s) trouvée(s)</p>
-          </div>
-          <a href="{{ route('home') }}" class="see-all">← Retour à l'accueil</a>
+          <span class="section-tag">Résultats</span>
+          <h2 class="section-title">
+            @if(request('all'))
+              Toutes les <span class="accent">formations</span>
+            @elseif(request('search'))
+              Recherche : <span class="accent">{{ request('search') }}</span>
+            @else
+              Catalogue des <span class="accent">formations</span>
+            @endif
+          </h2>
+          <p class="section-sub">{{ $searchResults->total() }} formation(s) trouvée(s)</p>
+          <a href="{{ route('home') }}" class="inline-block mt-4 text-[#F97316] font-bold hover:underline">← Retour à
+            l'accueil</a>
         </div>
 
         @if($searchResults->count() > 0)
@@ -1388,7 +1085,18 @@
                   <div class="card-footer">
                     <span
                       class="price-new">{{ $course->price > 0 ? number_format($course->price, 0, ',', ' ') . ' FCFA' : 'Gratuit' }}</span>
-                    <a href="{{ route('courses.show', $course->id) }}" class="btn-voir">Voir</a>
+
+                    <div class="flex gap-2">
+                      <form action="{{ route('cart.add', $course->id) }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit"
+                          class="bg-[#122255] hover:bg-[#1A3070] text-white p-2 rounded transition-colors whitespace-nowrap"
+                          title="Ajouter au panier">
+                          <i class="fas fa-cart-plus"></i>
+                        </button>
+                      </form>
+                      <a href="{{ route('courses.show', $course->id) }}" class="btn-voir">Voir</a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1464,7 +1172,17 @@
                 <div class="card-footer">
                   <span
                     class="price-new">{{ $course->price > 0 ? number_format($course->price, 0, ',', ' ') . ' FCFA' : 'Gratuit' }}</span>
-                  <a href="{{ route('courses.show', $course->id) }}" class="btn-voir">Voir</a>
+                  <div class="flex gap-2">
+                    <form action="{{ route('cart.add', $course->id) }}" method="POST" class="inline">
+                      @csrf
+                      <button type="submit"
+                        class="bg-[#122255] hover:bg-[#1A3070] text-white p-2 rounded transition-colors whitespace-nowrap"
+                        title="Ajouter au panier">
+                        <i class="fas fa-cart-plus"></i>
+                      </button>
+                    </form>
+                    <a href="{{ route('courses.show', $course->id) }}" class="btn-voir">Voir</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1601,49 +1319,7 @@
   </section>
 
   <!-- ===================== FOOTER ===================== -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-logo-wrap">
-            <div
-              style="width:36px;height:36px;background:var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-              </svg>
-            </div>
-            <span class="footer-logo-text">OPTI-<span>LEARNING</span></span>
-          </div>
-          <p class="footer-desc">La plateforme de formation en ligne pensée pour l'Afrique. Des cours certifiants
-            accessibles depuis votre téléphone.</p>
-          <div class="payment-badges">
-            <span class="pay-badge">MTN Money</span>
-            <span class="pay-badge">Moov Money</span>
-            <span class="pay-badge">Visa / MasterCard</span>
-          </div>
-          <div class="social-links">
-            <button class="social-btn">f</button>
-            <button class="social-btn">in</button>
-            <button class="social-btn">▶</button>
-          </div>
-        </div>
-        <div class="footer-col">
-          <h4>Plateforme</h4><a href="#">Comment ça marche</a><a href="#">Devenir formateur</a><a href="#">Tarifs &
-            Paiement</a><a href="#">FAQ</a>
-        </div>
-        <div class="footer-col">
-          <h4>Entreprise</h4><a href="#">À propos</a><a href="#">Contact</a><a href="#">Partenaires</a>
-        </div>
-        <div class="footer-col">
-          <h4>Légal</h4><a href="#">Confidentialité</a><a href="#">Mentions légales</a><a href="#">CGU</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span class="footer-copy">© 2026 OptiLearning. Tous droits réservés. Conçu avec ❤️ pour l'Afrique.</span>
-        <div class="footer-links"><a href="#">Confidentialité</a><a href="#">Mentions légales</a></div>
-      </div>
-    </div>
-  </footer>
+  <x-footer />
 
   <script>
     // Hamburger menu - gère l'ouverture/fermeture du menu mobile/tablette

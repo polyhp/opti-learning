@@ -92,22 +92,44 @@ class DashboardController extends Controller
     public function catalog(Request $request)
     {
         $search = $request->input('search');
+        $categoryId = $request->input('category');
+        $trainerId = $request->input('trainer');
+        $title = $request->input('title');
+        $priceMax = $request->input('price_max');
 
         $coursesQuery = Course::where('status', 'approved')
             ->with(['category', 'formateur.user'])
             ->withCount('lessons');
 
-        if ($search) {
-            $coursesQuery->where(function($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhereHas('formateur.user', function($q2) use ($search) {
-                      $q2->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%");
-                  })
-                  ->orWhereHas('category', function($q3) use ($search) {
-                      $q3->where('name', 'like', "%{$search}%");
-                  });
-            });
+        if ($search || $categoryId || $trainerId || $title || $priceMax) {
+            
+            // Recherche générique textuelle
+            if ($search) {
+                $coursesQuery->where(function($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhereHas('formateur.user', function($q2) use ($search) {
+                          $q2->where('first_name', 'like', "%{$search}%")
+                             ->orWhere('last_name', 'like', "%{$search}%");
+                      })
+                      ->orWhereHas('category', function($q3) use ($search) {
+                          $q3->where('name', 'like', "%{$search}%");
+                      });
+                });
+            }
+
+            // Filtres spécifiques
+            if ($categoryId) {
+                $coursesQuery->where('category_id', $categoryId);
+            }
+            if ($trainerId) {
+                $coursesQuery->where('formateur_id', $trainerId);
+            }
+            if ($title) {
+                $coursesQuery->where('title', 'like', "%{$title}%");
+            }
+            if ($priceMax) {
+                $coursesQuery->where('price', '<=', $priceMax);
+            }
         }
 
         $courses = $coursesQuery->orderBy('created_at', 'desc')->paginate(12)->withQueryString();

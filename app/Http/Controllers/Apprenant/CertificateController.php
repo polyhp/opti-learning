@@ -69,7 +69,7 @@ class CertificateController extends Controller
         ];
 
         $pdf = Pdf::loadView('pdf.certificate', $data)->setPaper('a4', 'landscape');
-        return $pdf->download("Certificat_{$course->slug}.pdf");
+        return $pdf->stream("Certificat_{$course->slug}.pdf");
     }
 
     public function verify($code)
